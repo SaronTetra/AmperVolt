@@ -1,14 +1,13 @@
 package com.kernelpanic.nfcbanksim
 
-import com.fasterxml.jackson.databind.ser.std.StdJdkSerializers
 import com.kernelpanic.nfcbanksim.Database.BankDatabase
+import com.kernelpanic.nfcbanksim.GET.GetClient
 import com.kernelpanic.nfcbanksim.POST.SignUp
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import org.springframework.ui.Model
-import org.springframework.ui.set
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.util.concurrent.atomic.AtomicLong
 
@@ -17,36 +16,41 @@ class UserController {
     val db = BankDatabase()
     val counter = AtomicLong()
 
-    @GetMapping("/user")
-    fun hello(@RequestParam(value = "name", defaultValue = "World") name : String) =
-            User(counter.incrementAndGet(), "Hello, $name")
 
-    @GetMapping("/all")
-    fun allUsers() : User { //TODO arraylist
-        db.printAllClients()
-        return User(1, "a")
-    }
+
+//    @GetMapping("/user")
+//    fun hello(@RequestParam(value = "name", defaultValue = "World") name : String) =
+//            User(counter.incrementAndGet(), "Hello, $name")
+//
+//
+//
+//    @GetMapping("/all")
+//    fun allUsers() : User { //TODO arraylist
+//        db.printAllClients()
+//        return User(1, "a")
+//    }
+
+
 
     @PostMapping("/signup",
-            consumes =
-            [MediaType.APPLICATION_JSON_VALUE])
-    fun signUp(
-            @RequestBody signUp: SignUp){
+            consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseBody
+    fun signUp(@RequestBody signUp: SignUp): ResponseEntity<Unit>{
 
-        println("Name: ${signUp._name}, Login: ${signUp._login}, Password: ${signUp._password}")
-        db.signUp(signUp._name, signUp._login, signUp._password)
+        println("Name: ${signUp.name}, Login: ${signUp.login}, Password: ${signUp.password}")
+        db.signUp(signUp.name, signUp.login, signUp.password)
+        return ResponseEntity(HttpStatus.CREATED) //TODO error
     }
 
 
+    @GetMapping("/{login}")
+    fun getUserByLogin(@PathVariable login: String) : GetClient {
+        return db.getByLogin(login)
+    }
 
-    //TODO wplata z banku (może id 0?)
-    //TODO Sign up
-    //TODO Delete account(somehow preserve in history)
-    //TODO Transaction
-    //TODO New Card - maciej
-    //TODO Login
-    //TODO CardCost
-    //TODO Deposit
-    //TODO All transactions for user; maybe some filters later?
+    @DeleteMapping("/users/{id}/delete-account")
+    fun deleteAccount(){
+
+    }
 
 }

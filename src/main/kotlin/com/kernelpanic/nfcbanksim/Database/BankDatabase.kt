@@ -1,5 +1,6 @@
 package com.kernelpanic.nfcbanksim.Database
 
+import com.kernelpanic.nfcbanksim.GET.GetClient
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
@@ -22,18 +23,34 @@ class BankDatabase {
         }
     }
 
-    fun signUp(name_: String, login_: String, password_: String){
+    fun signUp(name: String, login: String, password: String){
 
         transaction {
             val id = Client.insertAndGetId {
-                it[name] = name_
-                it[login] = login_
-                it[password] = password_
-//                it[balance] = 0.0
+                it[this.name] = name
+                it[this.login] = login
+                it[this.password] = password
+            }
 
+        }
+    }
+
+
+    fun getByLogin(login: String): GetClient {
+
+        val result = GetClient()
+        //var result = GetClient()
+        transaction {
+            Client.select{Client.login like login}.forEach{
+                result.name = it[Client.name]
+                result.login = it[Client.login]
+                //result.creationDate = it[Client.created]
+                result.balance = it[Client.balance]
 
             }
+//            println("Name: ${result.name}\tBalance ${result.balance}")
         }
+        return result
     }
 
 
