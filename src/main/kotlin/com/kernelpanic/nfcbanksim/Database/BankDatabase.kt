@@ -44,13 +44,29 @@ class BankDatabase {
             Client.select{Client.login like login}.forEach{
                 result.name = it[Client.name]
                 result.login = it[Client.login]
-                //result.creationDate = it[Client.created]
+                result.creationDate = it[Client.created].toString()
                 result.balance = it[Client.balance]
 
             }
 //            println("Name: ${result.name}\tBalance ${result.balance}")
         }
         return result
+    }
+
+
+    fun deleteAccount(login: String){
+        transaction {
+            Client.select{Client.login like login}.forEach{ itr ->
+                ExClient.insertAndGetId {
+                    it[this.name] = itr[Client.name]
+                    it[this.login] = itr[Client.login]
+                    it[this.created] = itr[Client.created]
+                    it[this.previousID] = itr[Client.id].value
+                }
+
+            }
+            Client.deleteWhere { Client.login like login }
+        }
     }
 
 

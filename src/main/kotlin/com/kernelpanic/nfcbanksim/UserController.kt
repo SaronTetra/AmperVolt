@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.concurrent.atomic.AtomicLong
+import kotlin.math.log
 
 @RestController
 class UserController {
@@ -43,14 +44,17 @@ class UserController {
     }
 
 
-    @GetMapping("/{login}")
+    @GetMapping("/{login}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getUserByLogin(@PathVariable login: String) : GetClient {
         return db.getByLogin(login)
     }
 
-    @DeleteMapping("/users/{id}/delete-account")
-    fun deleteAccount(){
+    @DeleteMapping("/users/{login}/delete-account")
+    @ResponseBody
+    fun deleteAccount(@PathVariable login: String): ResponseEntity<Unit>{
 
+        db.deleteAccount(login)
+        return ResponseEntity(HttpStatus.OK) //TODO error
     }
 
 }
