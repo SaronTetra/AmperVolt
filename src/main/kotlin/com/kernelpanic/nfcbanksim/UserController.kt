@@ -4,6 +4,7 @@ import com.kernelpanic.nfcbanksim.Database.BankDatabase
 import com.kernelpanic.nfcbanksim.GET.GetClient
 import com.kernelpanic.nfcbanksim.POST_PUT.PutMoneyJSON
 import com.kernelpanic.nfcbanksim.POST_PUT.SignUp
+import com.kernelpanic.nfcbanksim.POST_PUT.TransactionJSON
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -62,6 +63,15 @@ class UserController {
     @ResponseBody
     fun putMoney(@RequestBody putMoneyJSON: PutMoneyJSON): ResponseEntity<Unit>{
         db.putMoney(putMoneyJSON.login, putMoneyJSON.money, putMoneyJSON.title)
+        return ResponseEntity(HttpStatus.OK) //TODO error
+    }
+
+
+    @PutMapping("/transaction")
+    @ResponseBody
+    fun transaction(@RequestBody transactionJSON: TransactionJSON): ResponseEntity<Unit>{
+
+        db.doTransaction(transactionJSON.login, transactionJSON.destinationLogin, transactionJSON.money, transactionJSON.title)
         return ResponseEntity(HttpStatus.OK) //TODO error
     }
 

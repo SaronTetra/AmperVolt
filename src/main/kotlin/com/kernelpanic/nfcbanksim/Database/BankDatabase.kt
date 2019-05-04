@@ -107,5 +107,43 @@ class BankDatabase {
                     }
         }
     }
+
+
+
+    fun doTransaction(login: String, destinationLogin: String, moneyPut: Double, title: String){
+
+        transaction {
+            Client
+                    .select(Client.login like login)
+                    .forEach { itr ->
+                        val id = itr[Client.id].value
+                        Client
+                                .select(Client.login like destinationLogin)
+                                .forEach{ itrnd ->
+                                    val destId = itrnd[Client.id].value
+
+                                    Bank_Transaction.insertAndGetId {
+                                        it[this.fromId] = id
+                                        it[this.toId] = destId
+                                        it[this.money] = moneyPut
+                                        it[this.type] = "TRN"
+                                        it[this.title] = title
+                                    }
+                                }
+
+                        Client.update({ Client.login like login }) {
+                            with(SqlExpressionBuilder) {
+                                it.update(Client.balance, Client.balance - moneyPut)
+                            }
+                        }
+
+                        Client.update({ Client.login like destinationLogin }) {
+                            with(SqlExpressionBuilder) {
+                                it.update(Client.balance, Client.balance + moneyPut)
+                            }
+                        }
+                    }
+        }
+    }
 }
 
