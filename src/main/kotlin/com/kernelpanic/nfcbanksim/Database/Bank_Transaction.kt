@@ -7,7 +7,8 @@ object Bank_Transaction: IntIdTable() {
     val toId = integer("toId") //id of clinet who is recieving a transfer
     val orderDate = datetime("orderDate")
     val executionDate = datetime("executionDate")
-    val money = Client.double("money")
-    val type = Client.varchar("type", 30) //type of transaction
+    val money = double("money")
+    val type = varchar("type", 3) //type of transaction
+    val title = varchar("title", 100)
 
 }

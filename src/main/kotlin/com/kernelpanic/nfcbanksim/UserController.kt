@@ -2,7 +2,8 @@ package com.kernelpanic.nfcbanksim
 
 import com.kernelpanic.nfcbanksim.Database.BankDatabase
 import com.kernelpanic.nfcbanksim.GET.GetClient
-import com.kernelpanic.nfcbanksim.POST.SignUp
+import com.kernelpanic.nfcbanksim.POST_PUT.PutMoneyJSON
+import com.kernelpanic.nfcbanksim.POST_PUT.SignUp
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.concurrent.atomic.AtomicLong
-import kotlin.math.log
 
 @RestController
 class UserController {
@@ -44,7 +44,7 @@ class UserController {
     }
 
 
-    @GetMapping("/{login}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping("users/{login}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getUserByLogin(@PathVariable login: String) : GetClient {
         return db.getByLogin(login)
     }
@@ -54,6 +54,14 @@ class UserController {
     fun deleteAccount(@PathVariable login: String): ResponseEntity<Unit>{
 
         db.deleteAccount(login)
+        return ResponseEntity(HttpStatus.OK) //TODO error
+    }
+
+
+    @PutMapping("/put-money")
+    @ResponseBody
+    fun putMoney(@RequestBody putMoneyJSON: PutMoneyJSON): ResponseEntity<Unit>{
+        db.putMoney(putMoneyJSON.login, putMoneyJSON.money, putMoneyJSON.title)
         return ResponseEntity(HttpStatus.OK) //TODO error
     }
 

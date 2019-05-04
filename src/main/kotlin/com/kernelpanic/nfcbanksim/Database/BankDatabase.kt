@@ -2,6 +2,7 @@ package com.kernelpanic.nfcbanksim.Database
 
 import com.kernelpanic.nfcbanksim.GET.GetClient
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
 import java.time.LocalDateTime
@@ -14,17 +15,20 @@ class BankDatabase {
 
     }
 
-    fun printAllClients(){
+    fun printAllClients() {
 
         transaction {
-            Client.selectAll().forEach{
-                println("Client: "+ it[Client.name] + "\tBalance: " + it[Client.balance])
+            Client
+                    .selectAll()
+                    .forEach {
+                println("Client: " + it[Client.name] + "\tBalance: " + it[Client.balance])
             }
         }
     }
 
-    fun signUp(name: String, login: String, password: String){
+    fun signUp(name: String, login: String, password: String) {
 
+        //DSL
         transaction {
             val id = Client.insertAndGetId {
                 it[this.name] = name
@@ -33,7 +37,11 @@ class BankDatabase {
             }
 
         }
-    }
+
+
+
+        }
+
 
 
     fun getByLogin(login: String): GetClient {
@@ -41,26 +49,30 @@ class BankDatabase {
         val result = GetClient()
         //var result = GetClient()
         transaction {
-            Client.select{Client.login like login}.forEach{
-                result.name = it[Client.name]
-                result.login = it[Client.login]
-                result.creationDate = it[Client.created].toString()
-                result.balance = it[Client.balance]
+            Client
+                    .select(Client.login like login)
+                    .forEach {
+                        result.name = it[Client.name]
+                        result.login = it[Client.login]
+                        result.creationDate = it[Client.creationDate].toString()
+                        result.balance = it[Client.balance]
 
-            }
+                    }
 //            println("Name: ${result.name}\tBalance ${result.balance}")
         }
         return result
     }
 
 
-    fun deleteAccount(login: String){
+    fun deleteAccount(login: String) {
         transaction {
-            Client.select{Client.login like login}.forEach{ itr ->
+            Client
+                    .select { Client.login like login }
+                    .forEach { itr ->
                 ExClient.insertAndGetId {
                     it[this.name] = itr[Client.name]
                     it[this.login] = itr[Client.login]
-                    it[this.created] = itr[Client.created]
+                    it[this.created] = itr[Client.creationDate]
                     it[this.previousID] = itr[Client.id].value
                 }
 
@@ -69,6 +81,31 @@ class BankDatabase {
         }
     }
 
+    fun putMoney(login: String, moneyPut: Double, title: String) {
+        transaction {
+
+            Client
+                    .select(Client.login like login)
+                    .forEach { itr ->
+                        //println("\n\nId of client:" + itr[Client.id].value + "\n\n")
+                        val id = itr[Client.id].value
+
+                        Bank_Transaction.insertAndGetId {
+                            it[this.fromId] = id
+                            it[this.toId] = id
+                            it[this.money] = moneyPut
+                            it[this.type] = "PUT"
+                            it[this.title] = title
+                        }
 
 
+                        Client.update({ Client.login like login }) {
+                            with(SqlExpressionBuilder) {
+                                it.update(Client.balance, Client.balance + moneyPut)
+                            }
+                        }
+                    }
+        }
+    }
 }
+
