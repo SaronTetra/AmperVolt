@@ -5,8 +5,6 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class BankDatabase {
     init {
@@ -40,7 +38,7 @@ class BankDatabase {
 
 
 
-        }
+    }
 
 
 
@@ -52,6 +50,7 @@ class BankDatabase {
             Client
                     .select(Client.login like login)
                     .forEach {
+                        result.id = it[Client.id].value
                         result.name = it[Client.name]
                         result.login = it[Client.login]
                         result.creationDate = it[Client.creationDate].toString()
@@ -144,6 +143,29 @@ class BankDatabase {
                         }
                     }
         }
+    }
+
+
+    fun addCard(cardNumber: String, cvc: Int, ownerLogin: String, pin: Int) {
+//        var id = 0
+//       Client.select {Client.login like ownerLogin}.forEach {
+//           id = it[Client.id].value
+//       }
+
+        //DSL
+        transaction {
+            Card.insertAndGetId {
+                it[this.number] = cardNumber
+                it[this.cvc] = cvc
+                it[this.ownerID] = getByLogin(ownerLogin).id
+                it[this.pin] = pin
+                it[this.date] = DateTime.now() + 31556926 * 2
+            }
+
+        }
+
+
+
     }
 }
 
