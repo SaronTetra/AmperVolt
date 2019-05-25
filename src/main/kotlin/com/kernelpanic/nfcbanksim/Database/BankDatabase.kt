@@ -171,7 +171,7 @@ class BankDatabase {
                 it[this.cvc] = cvc
                 it[this.ownerID] = getByLogin(ownerLogin).id
                 it[this.pin] = pin
-                it[this.date] = DateTime.now() + 31556926 * 2
+                it[this.date] = DateTime.now() + 31556926000 * 2 //TODO: Find a bettter way to add 2 years to a date
             }
 
         }
