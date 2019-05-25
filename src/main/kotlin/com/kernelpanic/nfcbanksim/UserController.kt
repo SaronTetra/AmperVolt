@@ -3,6 +3,7 @@ package com.kernelpanic.nfcbanksim
 import com.kernelpanic.nfcbanksim.Cards.generateCardNumber
 import com.kernelpanic.nfcbanksim.Database.BankDatabase
 import com.kernelpanic.nfcbanksim.GET.GetClient
+import com.kernelpanic.nfcbanksim.GET.GetTransactions
 import com.kernelpanic.nfcbanksim.POST_PUT.AddCard
 import com.kernelpanic.nfcbanksim.POST_PUT.PutMoneyJSON
 import com.kernelpanic.nfcbanksim.POST_PUT.SignUp
@@ -86,6 +87,11 @@ class UserController {
         println("Number: ${cardNumber}, cvc: ${newCard.cvc}, PIN: ${newCard.pin}")
         db.addCard(cardNumber, newCard.cvc, login, newCard.pin)
         return ResponseEntity(HttpStatus.CREATED) //TODO error
+    }
+
+    @GetMapping("/users/{login}/transactions", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getTransactions(@PathVariable login: String): ArrayList<GetTransactions>{
+        return db.getTransactions(login)
     }
 
 }

@@ -1,6 +1,7 @@
 package com.kernelpanic.nfcbanksim.Database
 
 import com.kernelpanic.nfcbanksim.GET.GetClient
+import com.kernelpanic.nfcbanksim.GET.GetTransactions
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -40,12 +41,9 @@ class BankDatabase {
 
     }
 
-
-
     fun getByLogin(login: String): GetClient {
 
         val result = GetClient()
-        //var result = GetClient()
         transaction {
             Client
                     .select(Client.login like login)
@@ -61,7 +59,6 @@ class BankDatabase {
         }
         return result
     }
-
 
     fun deleteAccount(login: String) {
         transaction {
@@ -107,8 +104,6 @@ class BankDatabase {
         }
     }
 
-
-
     fun doTransaction(login: String, destinationLogin: String, moneyPut: Double, title: String){
 
         transaction {
@@ -145,12 +140,29 @@ class BankDatabase {
         }
     }
 
+    fun getTransactions(login: String): ArrayList<GetTransactions>{
+        var result = arrayListOf(GetTransactions())
+        transaction {
+            Bank_Transaction.select{
+                (Bank_Transaction.fromId eq getByLogin(login).id) or
+                        (Bank_Transaction.toId eq getByLogin(login).id)
+            }.forEach{
+                result.add(GetTransactions(it[Bank_Transaction.id].value,
+                        it[Bank_Transaction.fromId],
+                        it[Bank_Transaction.toId],
+                        it[Bank_Transaction.money],
+                        it[Bank_Transaction.type],
+                        it[Bank_Transaction.title],
+                        it[Bank_Transaction.orderDate].toString(),
+                        it[Bank_Transaction.executionDate].toString()
+                        )
+                )
+            }
+        }
+        return result
+    }
 
     fun addCard(cardNumber: String, cvc: Int, ownerLogin: String, pin: Int) {
-//        var id = 0
-//       Client.select {Client.login like ownerLogin}.forEach {
-//           id = it[Client.id].value
-//       }
 
         //DSL
         transaction {
