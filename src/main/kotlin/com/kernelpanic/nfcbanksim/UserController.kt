@@ -1,7 +1,10 @@
 package com.kernelpanic.nfcbanksim
 
+import com.kernelpanic.nfcbanksim.Cards.generateCardNumber
 import com.kernelpanic.nfcbanksim.Database.BankDatabase
 import com.kernelpanic.nfcbanksim.GET.GetClient
+import com.kernelpanic.nfcbanksim.GET.GetTransactions
+import com.kernelpanic.nfcbanksim.POST_PUT.AddCard
 import com.kernelpanic.nfcbanksim.POST_PUT.PutMoneyJSON
 import com.kernelpanic.nfcbanksim.POST_PUT.SignUp
 import com.kernelpanic.nfcbanksim.POST_PUT.TransactionJSON
@@ -73,6 +76,22 @@ class UserController {
 
         db.doTransaction(transactionJSON.login, transactionJSON.destinationLogin, transactionJSON.money, transactionJSON.title)
         return ResponseEntity(HttpStatus.OK) //TODO error
+    }
+
+
+     @PostMapping("/users/{login}/add-card",
+            consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseBody
+    fun addCard(@PathVariable login:String, @RequestBody newCard: AddCard): ResponseEntity<Unit>{
+        val cardNumber = generateCardNumber()
+        println("Number: ${cardNumber}, cvc: ${newCard.cvc}, PIN: ${newCard.pin}")
+        db.addCard(cardNumber, newCard.cvc, login, newCard.pin)
+        return ResponseEntity(HttpStatus.CREATED) //TODO error
+    }
+
+    @GetMapping("/users/{login}/transactions", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getTransactions(@PathVariable login: String): ArrayList<GetTransactions>{
+        return db.getTransactions(login)
     }
 
 }
