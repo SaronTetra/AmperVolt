@@ -5,10 +5,7 @@ import com.kernelpanic.nfcbanksim.Database.BankDatabase
 import com.kernelpanic.nfcbanksim.GET.GetCard
 import com.kernelpanic.nfcbanksim.GET.GetClient
 import com.kernelpanic.nfcbanksim.GET.GetTransactions
-import com.kernelpanic.nfcbanksim.POST_PUT.AddCard
-import com.kernelpanic.nfcbanksim.POST_PUT.PutMoneyJSON
-import com.kernelpanic.nfcbanksim.POST_PUT.SignUp
-import com.kernelpanic.nfcbanksim.POST_PUT.TransactionJSON
+import com.kernelpanic.nfcbanksim.POST_PUT.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -80,7 +77,7 @@ class UserController {
     }
 
 
-     @PostMapping("/users/{login}/add-card",
+    @PostMapping("/users/{login}/add-card",
             consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     fun addCard(@PathVariable login:String, @RequestBody newCard: AddCard): ResponseEntity<Unit>{
@@ -90,13 +87,24 @@ class UserController {
         return ResponseEntity(HttpStatus.CREATED) //TODO error
     }
 
+    @CrossOrigin(origins = ["https://192.168.1.40"])
     @GetMapping("/users/{login}/transactions", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getTransactions(@PathVariable login: String): ArrayList<GetTransactions>{
         return db.getTransactions(login)
     }
 
+    @CrossOrigin(origins = ["https://192.168.1.40"])
     @GetMapping("/card/{uuid}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getCardFromUUID(@PathVariable uuid: String): GetCard {
         return db.getCardByUUID(uuid)
+    }
+
+    @CrossOrigin(origins = ["https://192.168.1.40"])
+    @PostMapping("/users/{login}/pay",
+            consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseBody
+    fun cardPayment(@PathVariable login:String, @RequestBody cardTrans: CardTransaction): ResponseEntity<Unit>{
+        db.cardTransactino(cardTrans.uuid, login, cardTrans.money, cardTrans.title)
+        return ResponseEntity(HttpStatus.OK) //TODO error
     }
 }

@@ -28,7 +28,7 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     runtimeOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    compile 'org.jetbrains.exposed:exposed:0.13.2'
+    compile 'org.jetbrains.exposed:exposed:0.13.7'
     compile "mysql:mysql-connector-java:5.1.46"
 }
 

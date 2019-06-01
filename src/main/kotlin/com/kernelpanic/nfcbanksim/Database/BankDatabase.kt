@@ -63,6 +63,24 @@ class BankDatabase {
         return result
     }
 
+    fun getUserByID(id: Int): GetClient {
+
+        val result = GetClient()
+                transaction {
+            Client.select { Client.id eq id }
+                    .forEach {
+                        result.id = it[Client.id].value
+                        result.name = it[Client.name]
+                        result.login = it[Client.login]
+                        result.creationDate = it[Client.creationDate].toString()
+                        result.balance = it[Client.balance]
+
+                    }
+//            println("Name: ${result.name}\tBalance ${result.balance}")
+        }
+        return result
+    }
+
     fun deleteAccount(login: String) {
         transaction {
             Client
@@ -196,6 +214,12 @@ class BankDatabase {
                     }
         }
         return result
+    }
+
+    fun cardTransactino(uuid: String, destinationLogin: String, moneyAmount: Double, title: String){
+    val card = getCardByUUID(uuid)
+
+        doTransaction(getUserByID(card.ownerID).login, destinationLogin, moneyAmount, title)
     }
 }
 
