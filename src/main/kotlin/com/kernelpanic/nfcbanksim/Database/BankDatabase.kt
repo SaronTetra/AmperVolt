@@ -1,11 +1,14 @@
 package com.kernelpanic.nfcbanksim.Database
 
+import com.kernelpanic.nfcbanksim.GET.GetCard
 import com.kernelpanic.nfcbanksim.GET.GetClient
 import com.kernelpanic.nfcbanksim.GET.GetTransactions
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
+import java.util.*
+import kotlin.collections.ArrayList
 
 class BankDatabase {
     init {
@@ -172,12 +175,27 @@ class BankDatabase {
                 it[this.ownerID] = getByLogin(ownerLogin).id
                 it[this.pin] = pin
                 it[this.date] = DateTime.now() + 31556926000 * 2 //TODO: Find a bettter way to add 2 years to a date
+                it[this.uuid] = UUID.randomUUID().toString()
             }
 
         }
+    }
 
-
-
+    fun getCardByUUID(uuid: String): GetCard{
+        val result = GetCard()
+        transaction {
+            Card
+                    .select(Card.uuid like uuid)
+                    .forEach {
+                        result.number = it[Card.number]
+                        result.date = it[Card.date].toString()
+                        result.cvc = it[Card.cvc]
+                        result.ownerID = it[Card.ownerID]
+                        result.pin = it[Card.pin]
+                        result.uuid = it[Card.uuid]
+                    }
+        }
+        return result
     }
 }
 

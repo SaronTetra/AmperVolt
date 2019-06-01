@@ -8,5 +8,6 @@ object Card : IntIdTable() {
     val cvc = integer("cvc")
     val ownerID = integer("ownerID") // id of card owner
     val pin = integer("pin")
+    val uuid = varchar("nfc_uuid", 36)
 
 }

@@ -2,6 +2,7 @@ package com.kernelpanic.nfcbanksim
 
 import com.kernelpanic.nfcbanksim.Cards.generateCardNumber
 import com.kernelpanic.nfcbanksim.Database.BankDatabase
+import com.kernelpanic.nfcbanksim.GET.GetCard
 import com.kernelpanic.nfcbanksim.GET.GetClient
 import com.kernelpanic.nfcbanksim.GET.GetTransactions
 import com.kernelpanic.nfcbanksim.POST_PUT.AddCard
@@ -94,4 +95,8 @@ class UserController {
         return db.getTransactions(login)
     }
 
+    @GetMapping("/card/{uuid}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getCardFromUUID(@PathVariable uuid: String): GetCard {
+        return db.getCardByUUID(uuid)
+    }
 }
