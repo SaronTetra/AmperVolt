@@ -162,21 +162,36 @@ class BankDatabase {
     }
 
     fun getTransactions(login: String): ArrayList<GetTransactions>{
-        var result = arrayListOf(GetTransactions())
+//        var result = arrayListOf(GetTransactions())
+        var result = arrayListOf<GetTransactions>()
         transaction {
             Bank_Transaction.select{
                 (Bank_Transaction.fromId eq getByLogin(login).id) or
                         (Bank_Transaction.toId eq getByLogin(login).id)
             }.forEach{
+                val fromLogin = getUserByID(it[Bank_Transaction.fromId]).login
+                val toLogin = getUserByID(it[Bank_Transaction.toId]).login
+                val money: Double = it[Bank_Transaction.money]
                 result.add(GetTransactions(it[Bank_Transaction.id].value,
-                        it[Bank_Transaction.fromId],
-                        it[Bank_Transaction.toId],
-                        it[Bank_Transaction.money],
+                        fromLogin,
+                        toLogin,
+                        if(fromLogin == login && it[Bank_Transaction.type] != "PUT"){
+                            -money
+                        }
+                        else{
+                            money
+                        },
                         it[Bank_Transaction.type],
                         it[Bank_Transaction.title],
                         it[Bank_Transaction.orderDate].toString(),
-                        it[Bank_Transaction.executionDate].toString()
-                        )
+                        it[Bank_Transaction.executionDate].toString(),
+                        if(fromLogin == login) {
+                            toLogin
+                        }
+                        else{
+                            fromLogin
+                        }
+                )
                 )
             }
         }
