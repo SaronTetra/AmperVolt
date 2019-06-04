@@ -1,11 +1,14 @@
 package com.kernelpanic.nfcbanksim.Database
 
+import com.kernelpanic.nfcbanksim.GET.GetCard
 import com.kernelpanic.nfcbanksim.GET.GetClient
 import com.kernelpanic.nfcbanksim.GET.GetTransactions
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
+import java.util.*
+import kotlin.collections.ArrayList
 
 class BankDatabase {
     init {
@@ -47,6 +50,24 @@ class BankDatabase {
         transaction {
             Client
                     .select(Client.login like login)
+                    .forEach {
+                        result.id = it[Client.id].value
+                        result.name = it[Client.name]
+                        result.login = it[Client.login]
+                        result.creationDate = it[Client.creationDate].toString()
+                        result.balance = it[Client.balance]
+
+                    }
+//            println("Name: ${result.name}\tBalance ${result.balance}")
+        }
+        return result
+    }
+
+    fun getUserByID(id: Int): GetClient {
+
+        val result = GetClient()
+                transaction {
+            Client.select { Client.id eq id }
                     .forEach {
                         result.id = it[Client.id].value
                         result.name = it[Client.name]
@@ -141,21 +162,36 @@ class BankDatabase {
     }
 
     fun getTransactions(login: String): ArrayList<GetTransactions>{
-        var result = arrayListOf(GetTransactions())
+//        var result = arrayListOf(GetTransactions())
+        var result = arrayListOf<GetTransactions>()
         transaction {
             Bank_Transaction.select{
                 (Bank_Transaction.fromId eq getByLogin(login).id) or
                         (Bank_Transaction.toId eq getByLogin(login).id)
             }.forEach{
+                val fromLogin = getUserByID(it[Bank_Transaction.fromId]).login
+                val toLogin = getUserByID(it[Bank_Transaction.toId]).login
+                val money: Double = it[Bank_Transaction.money]
                 result.add(GetTransactions(it[Bank_Transaction.id].value,
-                        it[Bank_Transaction.fromId],
-                        it[Bank_Transaction.toId],
-                        it[Bank_Transaction.money],
+                        fromLogin,
+                        toLogin,
+                        if(fromLogin == login && it[Bank_Transaction.type] != "PUT"){
+                            -money
+                        }
+                        else{
+                            money
+                        },
                         it[Bank_Transaction.type],
                         it[Bank_Transaction.title],
                         it[Bank_Transaction.orderDate].toString(),
-                        it[Bank_Transaction.executionDate].toString()
-                        )
+                        it[Bank_Transaction.executionDate].toString(),
+                        if(fromLogin == login) {
+                            toLogin
+                        }
+                        else{
+                            fromLogin
+                        }
+                )
                 )
             }
         }
@@ -172,12 +208,33 @@ class BankDatabase {
                 it[this.ownerID] = getByLogin(ownerLogin).id
                 it[this.pin] = pin
                 it[this.date] = DateTime.now() + 31556926000 * 2 //TODO: Find a bettter way to add 2 years to a date
+                it[this.uuid] = UUID.randomUUID().toString()
             }
 
         }
+    }
 
+    fun getCardByUUID(uuid: String): GetCard{
+        val result = GetCard()
+        transaction {
+            Card
+                    .select(Card.uuid like uuid)
+                    .forEach {
+                        result.number = it[Card.number]
+                        result.date = it[Card.date].toString()
+                        result.cvc = it[Card.cvc]
+                        result.ownerID = it[Card.ownerID]
+                        result.pin = it[Card.pin]
+                        result.uuid = it[Card.uuid]
+                    }
+        }
+        return result
+    }
 
+    fun cardTransactino(uuid: String, destinationLogin: String, moneyAmount: Double, title: String){
+    val card = getCardByUUID(uuid)
 
+        doTransaction(getUserByID(card.ownerID).login, destinationLogin, moneyAmount, title)
     }
 }
 
