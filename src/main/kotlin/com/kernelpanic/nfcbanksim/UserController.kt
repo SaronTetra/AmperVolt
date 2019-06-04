@@ -87,15 +87,16 @@ class UserController {
         db.putMoney(putMoneyJSON.account, putMoneyJSON.money)
         return ResponseEntity(HttpStatus.OK) //TODO error
     }
-//
-//
-//    @PutMapping("/transaction")
-//    @ResponseBody
-//    fun transaction(@RequestBody transactionJSON: TransactionJSON): ResponseEntity<Unit>{
-//
-//        db.doTransaction(transactionJSON.login, transactionJSON.destinationLogin, transactionJSON.money, transactionJSON.title)
-//        return ResponseEntity(HttpStatus.OK) //TODO error
-//    }
+
+
+    @PutMapping("users/{login}/{account}/transaction")
+    @ResponseBody
+    fun transaction(@PathVariable login: String, @PathVariable account: String,
+                    @RequestBody transactionJSON: TransactionJSON): ResponseEntity<Unit>{
+
+        db.doTransaction(account, transactionJSON.destinationAcc, transactionJSON.money, transactionJSON.title)
+        return ResponseEntity(HttpStatus.OK) //TODO error
+    }
 //
 //
 //    @PostMapping("/users/{login}/add-card",

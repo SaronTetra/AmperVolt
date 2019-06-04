@@ -149,42 +149,44 @@ class BankDatabase {
         }
     }
 
-//    fun doTransaction(login: String, destinationLogin: String, moneyPut: Double, title: String){
-//
-//        transaction {
-//            Client
-//                    .select(Client.login like login)
-//                    .forEach { itr ->
-//                        val id = itr[Client.id].value
-//                        Client
-//                                .select(Client.login like destinationLogin)
-//                                .forEach{ itrnd ->
-//                                    val destId = itrnd[Client.id].value
-//
-//                                    Bank_Transaction.insertAndGetId {
-//                                        it[this.fromId] = id
-//                                        it[this.toId] = destId
-//                                        it[this.money] = moneyPut
-//                                        it[this.type] = "TRN"
-//                                        it[this.title] = title
-//                                    }
-//                                }
-//
-//                        Client.update({ Client.login like login }) {
-//                            with(SqlExpressionBuilder) {
-//                                it.update(Client.balance, Client.balance - moneyPut)
-//                            }
-//                        }
-//
-//                        Client.update({ Client.login like destinationLogin }) {
-//                            with(SqlExpressionBuilder) {
-//                                it.update(Client.balance, Client.balance + moneyPut)
-//                            }
-//                        }
-//                    }
-//        }
-//    }
-//
+    fun doTransaction(acc: String, destinationAcc: String, moneyPut: Double, title: String) {
+
+        transaction {
+
+            Account
+                    .select { Account.number like acc }
+                    .forEach { itr ->
+                        val accNumb = itr[Account.number]
+
+                        Bank_Transaction.insertAndGetId {
+                            it[this.from_account] = accNumb
+                            it[this.to_account] = destinationAcc
+                            it[this.money] = moneyPut
+                            it[this.type] = 2
+                            it[this.title] = title
+                        }
+
+
+                        Account.update({ Account.number like acc }) {
+                            with(SqlExpressionBuilder) {
+                                it.update(Account.balance, Account.balance - moneyPut)
+
+                            }
+
+                            Account.update({ Account.number like destinationAcc }) {
+                                with(SqlExpressionBuilder) {
+                                    it.update(Account.balance, Account.balance + moneyPut)
+
+                                }
+
+
+                            }
+
+                        }
+                    }
+        }
+    }
+
 //    fun getTransactions(login: String): ArrayList<GetTransactions>{
 ////        var result = arrayListOf(GetTransactions())
 //        var result = arrayListOf<GetTransactions>()
