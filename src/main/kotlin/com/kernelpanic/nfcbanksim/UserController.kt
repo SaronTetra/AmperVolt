@@ -61,11 +61,10 @@ class UserController {
         //TODO find from login id
         val gen = Random()
 
-        var generatedNumber =
-        ThreadLocalRandom.current().nextLong(1000000000000000, 9999999999999999).toString()
-//        var generatedNumber = gen.nextLong(1000000000000000, 9999999999999999)
-//        var generatedNumber = (1000000000000000..9999999999999999).random()
-
+        var generatedNumber = ThreadLocalRandom
+                .current()
+                .nextLong(1000000000000000, 9999999999999999)
+                .toString()
         generatedNumber = BANK_IDENTIFIER+generatedNumber
         db.createAccount(login, generatedNumber)
 
@@ -82,12 +81,12 @@ class UserController {
 //    }
 //
 //
-//    @PutMapping("/put-money")
-//    @ResponseBody
-//    fun putMoney(@RequestBody putMoneyJSON: PutMoneyJSON): ResponseEntity<Unit>{
-//        db.putMoney(putMoneyJSON.login, putMoneyJSON.money, putMoneyJSON.title)
-//        return ResponseEntity(HttpStatus.OK) //TODO error
-//    }
+    @PutMapping("/put-money")
+    @ResponseBody
+    fun putMoney(@RequestBody putMoneyJSON: PutMoneyJSON): ResponseEntity<Unit>{
+        db.putMoney(putMoneyJSON.account, putMoneyJSON.money)
+        return ResponseEntity(HttpStatus.OK) //TODO error
+    }
 //
 //
 //    @PutMapping("/transaction")

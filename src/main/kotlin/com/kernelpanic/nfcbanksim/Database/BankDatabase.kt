@@ -120,33 +120,35 @@ class BankDatabase {
 //        }
 //    }
 //
-//    fun putMoney(login: String, moneyPut: Double, title: String) {
-//        transaction {
-//
-//            Client
-//                    .select(Client.login like login)
-//                    .forEach { itr ->
-//                        //println("\n\nId of client:" + itr[Client.id].value + "\n\n")
-//                        val id = itr[Client.id].value
-//
-//                        Bank_Transaction.insertAndGetId {
-//                            it[this.fromId] = id
-//                            it[this.toId] = id
-//                            it[this.money] = moneyPut
-//                            it[this.type] = "PUT"
-//                            it[this.title] = title
-//                        }
-//
-//
-//                        Client.update({ Client.login like login }) {
-//                            with(SqlExpressionBuilder) {
-//                                it.update(Client.balance, Client.balance + moneyPut)
-//                            }
-//                        }
-//                    }
-//        }
-//    }
-//
+    fun putMoney(accountNumber: String, moneyPut: Double) {
+        transaction {
+
+            Account
+                    .select(Account.number like accountNumber)
+                    .forEach{itr ->
+                        val accNumb = itr[Account.number]
+
+
+                        Bank_Transaction.insertAndGetId {
+                            it[this.from_account] = accNumb
+                            it[this.to_account] = accNumb
+                            it[this.money] = moneyPut
+                            it[this.type] = 1
+                            it[this.title] = "Cash payment in bank"
+                        }
+
+                        Account.update({Account.number like accountNumber}){
+                            with(SqlExpressionBuilder){
+                                it.update(Account.balance, Account.balance + moneyPut)
+                            }
+                        }
+
+                    }
+
+
+        }
+    }
+
 //    fun doTransaction(login: String, destinationLogin: String, moneyPut: Double, title: String){
 //
 //        transaction {
