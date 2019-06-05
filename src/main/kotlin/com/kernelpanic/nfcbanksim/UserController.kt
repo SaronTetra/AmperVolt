@@ -115,18 +115,18 @@ class UserController {
 //        return db.getTransactions(login)
 //    }
 //
-//    @CrossOrigin(origins = ["https://192.168.1.40"])
-//    @GetMapping("/card/{uuid}", produces = [MediaType.APPLICATION_JSON_VALUE])
-//    fun getCardFromUUID(@PathVariable uuid: String): GetCard {
-//        return db.getCardByUUID(uuid)
-//    }
-//
-//    @CrossOrigin(origins = ["https://192.168.1.40"])
-//    @PostMapping("/users/{login}/pay",
-//            consumes = [MediaType.APPLICATION_JSON_VALUE])
-//    @ResponseBody
-//    fun cardPayment(@PathVariable login:String, @RequestBody cardTrans: CardTransaction): ResponseEntity<Unit>{
-//        db.cardTransactino(cardTrans.uuid, login, cardTrans.money, cardTrans.title)
-//        return ResponseEntity(HttpStatus.OK) //TODO error
-//    }
+    @CrossOrigin(origins = ["https://ampervolt.putelita.pl","https://kernelpanic.putelita.pl"])
+    @GetMapping("/card/{uuid}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getCardFromUUID(@PathVariable uuid: String): GetCard {
+        return db.getCardByUUID(uuid)
+    }
+
+    @CrossOrigin(origins = ["https://ampervolt.putelita.pl","https://kernelpanic.putelita.pl"])
+    @PostMapping("/users/{account}/pay",
+            consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseBody
+    fun cardPayment(@PathVariable account:String, @RequestBody cardTrans: CardTransaction): ResponseEntity<Unit>{
+        db.cardTransaction(cardTrans.uuid, account, cardTrans.money, cardTrans.title)
+        return ResponseEntity(HttpStatus.OK) //TODO error
+    }
 }

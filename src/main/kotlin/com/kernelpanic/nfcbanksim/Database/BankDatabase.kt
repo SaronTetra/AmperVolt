@@ -1,5 +1,6 @@
 package com.kernelpanic.nfcbanksim.Database
 
+import com.kernelpanic.nfcbanksim.GET.GetAccount
 import com.kernelpanic.nfcbanksim.GET.GetCard
 import com.kernelpanic.nfcbanksim.GET.GetClient
 import com.kernelpanic.nfcbanksim.GET.GetTransactions
@@ -240,27 +241,43 @@ class BankDatabase {
 //        }
 //    }
 //
-//    fun getCardByUUID(uuid: String): GetCard{
-//        val result = GetCard()
-//        transaction {
-//            Card
-//                    .select(Card.uuid like uuid)
-//                    .forEach {
-//                        result.number = it[Card.number]
-//                        result.date = it[Card.date].toString()
-//                        result.cvc = it[Card.cvc]
-//                        result.ownerID = it[Card.ownerID]
-//                        result.pin = it[Card.pin]
-//                        result.uuid = it[Card.uuid]
-//                    }
-//        }
-//        return result
-//    }
-//
-//    fun cardTransactino(uuid: String, destinationLogin: String, moneyAmount: Double, title: String){
-//    val card = getCardByUUID(uuid)
-//
-//        doTransaction(getUserByID(card.ownerID).login, destinationLogin, moneyAmount, title)
-//    }
+    fun getCardByUUID(uuid: String): GetCard{
+        val result = GetCard()
+        transaction {
+            Card
+                    .select(Card.uuid like uuid)
+                    .forEach {
+                        result.number = it[Card.number]
+                        result.creationDate= it[Card.creationDate].toString()
+                        result.expirationDate = it[Card.expirationDate].toString()
+                        result.cvc = it[Card.cvc]
+                        result.ownerID = it[Card.ownerAccountID]
+                        result.pin = it[Card.pin]
+                        result.uuid = it[Card.uuid]
+                    }
+        }
+        return result
+    }
+
+    fun getAccountByID(id: Int): GetAccount {
+        val result = GetAccount()
+        transaction {
+            Account
+                    .select{Account.id eq id}
+                    .forEach {
+                        result.number = it[Account.number]
+                        result.balance = it[Account.balance]
+                        result.owner_id = it[Account.owner_id]
+                    }
+        }
+        return result
+    }
+
+    fun cardTransaction(uuid: String, destinationAccount: String, moneyAmount: Double, title: String){
+        val card = getCardByUUID(uuid)
+        val account = transaction { Account.select { Account.id eq card.ownerID } }
+
+        doTransaction(getAccountByID(card.ownerID).number, destinationAccount, moneyAmount, title)
+    }
 }
 
