@@ -109,12 +109,12 @@ class UserController {
 //        return ResponseEntity(HttpStatus.CREATED) //TODO error
 //    }
 //
-//    @CrossOrigin(origins = ["https://192.168.1.40"])
-//    @GetMapping("/users/{login}/transactions", produces = [MediaType.APPLICATION_JSON_VALUE])
-//    fun getTransactions(@PathVariable login: String): ArrayList<GetTransactions>{
-//        return db.getTransactions(login)
-//    }
-//
+@CrossOrigin(origins = ["https://ampervolt.putelita.pl","https://kernelpanic.putelita.pl"])
+    @GetMapping("/users/{login}/{account}/transactions", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getTransactions(@PathVariable account: String): ArrayList<GetTransactions>{
+        return db.getTransactions(account)
+    }
+
     @CrossOrigin(origins = ["https://ampervolt.putelita.pl","https://kernelpanic.putelita.pl"])
     @GetMapping("/card/{uuid}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getCardFromUUID(@PathVariable uuid: String): GetCard {

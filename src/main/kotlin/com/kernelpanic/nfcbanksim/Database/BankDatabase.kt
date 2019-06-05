@@ -84,6 +84,22 @@ class BankDatabase {
         return result
     }
 
+    fun getAccountByNumber(number: String): GetAccount {
+
+        val result = GetAccount()
+        transaction {
+            Account
+                    .select{Account.number like number}
+                    .forEach {
+                        result.number = it[Account.number]
+                        result.balance = it[Account.balance]
+                        result.owner_id = it[Account.owner_id]
+                    }
+        }
+
+        return result
+    }
+
 
 //
 //    fun getUserByID(id: Int): GetClient {
@@ -188,42 +204,44 @@ class BankDatabase {
         }
     }
 
-//    fun getTransactions(login: String): ArrayList<GetTransactions>{
-////        var result = arrayListOf(GetTransactions())
-//        var result = arrayListOf<GetTransactions>()
-//        transaction {
-//            Bank_Transaction.select{
-//                (Bank_Transaction.fromId eq getByLogin(login).id) or
-//                        (Bank_Transaction.toId eq getByLogin(login).id)
-//            }.forEach{
-//                val fromLogin = getUserByID(it[Bank_Transaction.fromId]).login
-//                val toLogin = getUserByID(it[Bank_Transaction.toId]).login
-//                val money: Double = it[Bank_Transaction.money]
-//                result.add(GetTransactions(it[Bank_Transaction.id].value,
-//                        fromLogin,
-//                        toLogin,
-//                        if(fromLogin == login && it[Bank_Transaction.type] != "PUT"){
-//                            -money
-//                        }
-//                        else{
-//                            money
-//                        },
-//                        it[Bank_Transaction.type],
-//                        it[Bank_Transaction.title],
-//                        it[Bank_Transaction.orderDate].toString(),
-//                        it[Bank_Transaction.executionDate].toString(),
-//                        if(fromLogin == login) {
-//                            toLogin
-//                        }
-//                        else{
-//                            fromLogin
-//                        }
-//                )
-//                )
-//            }
-//        }
-//        return result
-//    }
+    fun getTransactions(account: String): ArrayList<GetTransactions>{
+        val result = arrayListOf<GetTransactions>()
+        transaction {
+            Bank_Transaction.select{
+                (Bank_Transaction.from_account like getAccountByNumber(account).number) or
+                        (Bank_Transaction.to_account like getAccountByNumber(account).number)
+            }.forEach{
+
+
+                val fromAcc = it[Bank_Transaction.from_account]
+                val toAcc = it[Bank_Transaction.to_account]
+                val money: Double = it[Bank_Transaction.money]
+                result.add(GetTransactions(it[Bank_Transaction.id].value,
+                        fromAcc,
+                        toAcc,
+                        if(fromAcc == account && it[Bank_Transaction.type] != 1){
+                            -money
+                        }
+                        else{
+                            money
+                        },
+                        it[Bank_Transaction.type],
+                        it[Bank_Transaction.title],
+                        it[Bank_Transaction.order_date].toString(),
+                        if(fromAcc == account) {
+                            toAcc
+                        }
+                        else{
+                            fromAcc
+                        }
+                )
+                )
+
+
+            }
+        }
+        return result
+    }
 //
 //    fun addCard(cardNumber: String, cvc: Int, ownerLogin: String, pin: Int) {
 //
