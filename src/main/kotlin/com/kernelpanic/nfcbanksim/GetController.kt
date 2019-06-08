@@ -29,6 +29,10 @@ class GetController {
 
 
 //    CLIENTS
+    @GetMapping("users/", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getUserByLogin() : ArrayList<GetClient> {
+        return db.getUsers()
+    }
 
 
 //    ACCOUNT

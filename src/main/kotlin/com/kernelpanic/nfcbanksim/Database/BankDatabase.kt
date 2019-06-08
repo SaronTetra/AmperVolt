@@ -20,18 +20,6 @@ class BankDatabase {
     }
 
 
-
-//    fun printAllClients() { TODO test join with name and surname
-//
-//        transaction {
-//            Client
-//                    .selectAll()
-//                    .forEach {
-//                println("Client: " + it[Client.login] + "\tBalance: " + it[Client.balance])
-//            }
-//        }
-//    }
-
     fun signUp(name: String, surname: String, login: String, password: String) {
 
         //DSL
@@ -52,6 +40,7 @@ class BankDatabase {
 
 
     }
+
     fun createAccount(login: String, number: String){
 
         //TODO find id from login
@@ -65,9 +54,6 @@ class BankDatabase {
         }
     }
 
-
-
-
     fun getByLogin(login: String): GetClient {
 
         val result = GetClient()
@@ -79,7 +65,6 @@ class BankDatabase {
                         result.login = it[Client.login]
                         result.creationDate = it[Client.creationDate].toString()
                     }
-//            println("Name: ${result.name}\tBalance ${result.balance}")
         }
         return result
     }
@@ -120,23 +105,7 @@ class BankDatabase {
 //        return result
 //    }
 //
-//    fun deleteAccount(login: String) {
-//        transaction {
-//            Client
-//                    .select { Client.login like login }
-//                    .forEach { itr ->
-//                ExClient.insertAndGetId {
-//                    it[this.name] = itr[Client.name]
-//                    it[this.login] = itr[Client.login]
-//                    it[this.created] = itr[Client.creationDate]
-//                    it[this.previousID] = itr[Client.id].value
-//                }
-//
-//            }
-//            Client.deleteWhere { Client.login like login }
-//        }
-//    }
-//
+
     fun putMoney(accountNumber: String, moneyPut: Double) {
         transaction {
 
@@ -297,6 +266,20 @@ class BankDatabase {
         val account = transaction { Account.select { Account.id eq card.ownerID } }
 
         doTransaction(getAccountByID(card.ownerID).number, destinationAccount, moneyAmount, title)
+    }
+
+    fun getUsers(): ArrayList<GetClient> {
+        val result = arrayListOf<GetClient>()
+        transaction{
+            Client.selectAll().forEach{
+                result.add(GetClient(
+                 it[Client.id].value,
+                 it[Client.login],
+                 it[Client.creationDate].toString()
+                ))
+            }
+        }
+        return result
     }
 }
 

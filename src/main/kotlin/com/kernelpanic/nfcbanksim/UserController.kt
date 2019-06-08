@@ -20,25 +20,6 @@ import java.util.concurrent.atomic.AtomicLong
 class UserController {
     val db = BankDatabase()
 
-//    @GetMapping("/user")
-//    fun hello(@RequestParam(value = "name", defaultValue = "World") name : String) =
-//            User(counter.incrementAndGet(), "Hello, $name")
-//
-//
-//
-//    @GetMapping("/all")
-//    fun allUsers() : User { //TODO arraylist
-//        db.printAllClients()
-//        return User(1, "a")
-//    }
-
-
-
-
-
-
-
-
 //
 //    @DeleteMapping("/users/{login}/delete-account")
 //    @ResponseBody
@@ -55,17 +36,5 @@ class UserController {
         db.putMoney(putMoneyJSON.account, putMoneyJSON.money)
         return ResponseEntity(HttpStatus.OK) //TODO error
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
