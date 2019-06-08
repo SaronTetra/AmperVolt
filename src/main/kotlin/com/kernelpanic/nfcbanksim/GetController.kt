@@ -2,6 +2,7 @@ package com.kernelpanic.nfcbanksim
 
 import com.kernelpanic.nfcbanksim.Cards.generateCardNumber
 import com.kernelpanic.nfcbanksim.Database.BankDatabase
+import com.kernelpanic.nfcbanksim.GET.GetAccount
 import com.kernelpanic.nfcbanksim.GET.GetCard
 import com.kernelpanic.nfcbanksim.GET.GetClient
 import com.kernelpanic.nfcbanksim.GET.GetTransactions
@@ -36,10 +37,16 @@ class GetController {
 
 
 //    ACCOUNT
-
+    @GetMapping("users/{login}/{account}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getAccountByNumber(@PathVariable login: String, @PathVariable account:String) : GetAccount {
+        return db.getAccountByNumber(account)
+    }
 
 //    ACCOUNTS
-
+   @GetMapping("users/{login}/accounts", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getAccounts(@PathVariable login: String) : ArrayList<GetAccount> {
+        return db.getAccounts(login)
+    }
 
 //    CARD
     @CrossOrigin(origins = ["https://ampervolt.putelita.pl","https://kernelpanic.putelita.pl"])

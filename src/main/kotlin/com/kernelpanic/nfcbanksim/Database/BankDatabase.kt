@@ -281,5 +281,20 @@ class BankDatabase {
         }
         return result
     }
+
+    fun getAccounts(login: String): ArrayList<GetAccount> {
+        val result = arrayListOf<GetAccount>()
+        transaction {
+            Account.select{Account.owner_id eq getByLogin(login).id}
+                    .forEach {
+                        result.add(GetAccount(
+                                it[Account.number],
+                                it[Account.balance],
+                                it[Account.owner_id]
+                        ))
+            }
+        }
+        return result
+    }
 }
 
