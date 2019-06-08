@@ -97,18 +97,18 @@ class UserController {
         db.doTransaction(account, transactionJSON.destinationAcc, transactionJSON.money, transactionJSON.title)
         return ResponseEntity(HttpStatus.OK) //TODO error
     }
-//
-//
-//    @PostMapping("/users/{login}/add-card",
-//            consumes = [MediaType.APPLICATION_JSON_VALUE])
-//    @ResponseBody
-//    fun addCard(@PathVariable login:String, @RequestBody newCard: AddCard): ResponseEntity<Unit>{
-//        val cardNumber = generateCardNumber()
-//        println("Number: ${cardNumber}, cvc: ${newCard.cvc}, PIN: ${newCard.pin}")
-//        db.addCard(cardNumber, newCard.cvc, login, newCard.pin)
-//        return ResponseEntity(HttpStatus.CREATED) //TODO error
-//    }
-//
+
+
+    @PostMapping("/users/{login}/{account}/add-card",
+            consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseBody
+    fun addCard(@PathVariable login:String, @PathVariable account: String, @RequestBody newCard: AddCard): ResponseEntity<Unit>{
+        val cardNumber = generateCardNumber()
+        println("Number: $cardNumber, cvc: ${newCard.cvc}, PIN: ${newCard.pin}")
+        db.addCard(cardNumber, newCard.cvc, account, newCard.pin)
+        return ResponseEntity(HttpStatus.CREATED) //TODO error
+    }
+
 @CrossOrigin(origins = ["https://ampervolt.putelita.pl","https://kernelpanic.putelita.pl"])
     @GetMapping("/users/{login}/{account}/transactions", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getTransactions(@PathVariable account: String): ArrayList<GetTransactions>{

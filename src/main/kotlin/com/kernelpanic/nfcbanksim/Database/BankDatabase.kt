@@ -156,7 +156,7 @@ class BankDatabase {
 
                         Account.update({Account.number like accountNumber}){
                             with(SqlExpressionBuilder){
-                                it.update(Account.balance, Account.balance + moneyPut)
+                                it.update(balance, balance + moneyPut)
                             }
                         }
 
@@ -186,13 +186,13 @@ class BankDatabase {
 
                         Account.update({ Account.number like acc }) {
                             with(SqlExpressionBuilder) {
-                                it.update(Account.balance, Account.balance - moneyPut)
+                                it.update(balance, balance - moneyPut)
 
                             }
 
                             Account.update({ Account.number like destinationAcc }) {
                                 with(SqlExpressionBuilder) {
-                                    it.update(Account.balance, Account.balance + moneyPut)
+                                    it.update(balance, balance + moneyPut)
 
                                 }
 
@@ -242,23 +242,24 @@ class BankDatabase {
         }
         return result
     }
-//
-//    fun addCard(cardNumber: String, cvc: Int, ownerLogin: String, pin: Int) {
-//
-//        //DSL
-//        transaction {
-//            Card.insertAndGetId {
-//                it[this.number] = cardNumber
-//                it[this.cvc] = cvc
-//                it[this.ownerID] = getByLogin(ownerLogin).id
-//                it[this.pin] = pin
-//                it[this.date] = DateTime.now() + 31556926000 * 2 //TODO: Find a bettter way to add 2 years to a date
-//                it[this.uuid] = UUID.randomUUID().toString()
-//            }
-//
-//        }
-//    }
-//
+
+    fun addCard(cardNumber: String, cvc: Int, ownerAccount: String, pin: Int) {
+
+        //DSL
+        transaction {
+            Card.insertAndGetId {
+                it[this.number] = cardNumber
+                it[this.creationDate] = DateTime.now()
+                it[this.expirationDate] = DateTime.now() + 31556926000 * 2 //TODO: Find a bettter way to add 2 years to a date
+                it[this.cvc] = cvc
+                it[this.ownerAccountID] = getAccountByNumber(ownerAccount).owner_id
+                it[this.pin] = pin
+                it[this.uuid] = UUID.randomUUID().toString()
+            }
+
+        }
+    }
+
     fun getCardByUUID(uuid: String): GetCard{
         val result = GetCard()
         transaction {
