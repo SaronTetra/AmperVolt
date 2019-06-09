@@ -297,5 +297,45 @@ class BankDatabase {
 
         doTransaction(getAccountByID(card.ownerID).number, destinationAccount, moneyAmount, title)
     }
+
+
+    /**
+    * DEVELOPER ONLY - DELETE ALL CLIENTS
+    * */
+    fun deleteAllClients(){
+        transaction {
+            Client.deleteAll()
+        }
+    }
+
+    /**
+     * DEVELOPER ONLY - DELETE ALL ACCOUNTS
+     * */
+    fun deleteAllAccounts(){
+        transaction {
+            Account.deleteAll()
+        }
+    }
+    /**
+     * DEVELOPER ONLY - DELETE ALL CLIENT DETAILS
+     * */
+    fun deleteAllClient_Details(){
+        transaction {
+            Client_Details.deleteAll()
+        }
+    }
+
+    fun deleteAllBank_Transactions(){
+        transaction {
+            Bank_Transaction.deleteAll()
+        }
+    }
+    fun deleteAllCards(){
+        transaction {
+            Card.deleteAll()
+        }
+    }
 }
+
+
 

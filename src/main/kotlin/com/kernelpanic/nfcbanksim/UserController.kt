@@ -81,6 +81,61 @@ class UserController {
 //    }
 //
 //
+
+    /**
+     * DEVELOPER ONLY - DELETE ALL CLIENTS
+     * */
+    @DeleteMapping("/dev/delete-clients")
+    @ResponseBody
+    fun deleteAllClients(): ResponseEntity<Unit>{
+        db.deleteAllClients()
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    /**
+     * DEVELOPER ONLY - DELETE ALL ACCOUNTS
+     * */
+
+    @DeleteMapping("/dev/delete-accounts")
+    @ResponseBody
+    fun deleteAllAccounts(): ResponseEntity<Unit>{
+        db.deleteAllAccounts()
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    /**
+     * DEVELOPER ONLY - DELETE ALL CLIENT DETAILS
+     * */
+    @DeleteMapping("/dev/delete-client-details")
+    @ResponseBody
+    fun deleteAllClientDetails(): ResponseEntity<Unit>{
+        db.deleteAllClient_Details()
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    /**
+     * DEVELOPER ONLY - DELETE ALL BANK TRANSACTIONS
+     * */
+    @DeleteMapping("/dev/delete-bank-transactions")
+    @ResponseBody
+    fun deleteAllBankTransactions(): ResponseEntity<Unit>{
+        db.deleteAllBank_Transactions()
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    /**
+     * DEVELOPER ONLY - DELETE ALL CARDS
+     * */
+    @DeleteMapping("/dev/delete-cards")
+    @ResponseBody
+    fun deleteAllCards(): ResponseEntity<Unit>{
+        db.deleteAllCards()
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+
+
+
     @PutMapping("/put-money")
     @ResponseBody
     fun putMoney(@RequestBody putMoneyJSON: PutMoneyJSON): ResponseEntity<Unit>{
