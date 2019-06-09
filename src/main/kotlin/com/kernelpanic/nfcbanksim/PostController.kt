@@ -14,7 +14,6 @@ import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
 @RestController
-
 class PostController {
     val db = BankDatabase()
     val BANK_IDENTIFIER: String = "6661987164"

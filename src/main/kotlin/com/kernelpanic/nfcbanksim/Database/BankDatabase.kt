@@ -221,7 +221,7 @@ class BankDatabase {
                 it[this.creationDate] = DateTime.now()
                 it[this.expirationDate] = DateTime.now() + 31556926000 * 2 //TODO: Find a bettter way to add 2 years to a date
                 it[this.cvc] = cvc
-                it[this.ownerAccountID] = getAccountByNumber(ownerAccount).owner_id
+                it[this.ownerAccountID] = getAccountByNumber(ownerAccount).id
                 it[this.pin] = pin
                 it[this.uuid] = UUID.randomUUID().toString()
             }
