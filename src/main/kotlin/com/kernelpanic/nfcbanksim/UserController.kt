@@ -133,6 +133,16 @@ class UserController {
         return ResponseEntity(HttpStatus.OK)
     }
 
+    /**
+     * DEVELOPER ONLY - DELETE ALL CARDS
+     * */
+    @DeleteMapping("/dev/delete-all")
+    @ResponseBody
+    fun deleteAll(): ResponseEntity<Unit>{
+        db.deleteAll()
+        return ResponseEntity(HttpStatus.OK)
+    }
+
 
 
 

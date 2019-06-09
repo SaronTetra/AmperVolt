@@ -335,6 +335,17 @@ class BankDatabase {
             Card.deleteAll()
         }
     }
+
+    fun deleteAll(){
+        transaction {
+            Client.deleteAll()
+            Account.deleteAll()
+            Client_Details.deleteAll()
+            Bank_Transaction.deleteAll()
+            Card.deleteAll()
+
+        }
+    }
 }
 
 
