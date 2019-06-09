@@ -1,21 +1,14 @@
 package com.kernelpanic.nfcbanksim
 
-import com.kernelpanic.nfcbanksim.Cards.generateCardNumber
 import com.kernelpanic.nfcbanksim.Database.BankDatabase
 import com.kernelpanic.nfcbanksim.GET.GetAccount
 import com.kernelpanic.nfcbanksim.GET.GetCard
 import com.kernelpanic.nfcbanksim.GET.GetClient
-import com.kernelpanic.nfcbanksim.GET.GetTransactions
-import com.kernelpanic.nfcbanksim.POST_PUT.*
-import org.springframework.http.HttpStatus
+import com.kernelpanic.nfcbanksim.GET.GetTransaction
 import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
-import java.util.concurrent.ThreadLocalRandom
-import java.util.concurrent.atomic.AtomicLong
 
 @RestController
 class GetController {
@@ -64,12 +57,16 @@ class GetController {
     }
 
 //    TRANSACTION
-
+    @CrossOrigin(origins = ["https://ampervolt.putelita.pl","https://kernelpanic.putelita.pl"])
+    @GetMapping("/users/{login}/{account}/{transaction}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getTransactionByID(@PathVariable account: String, @PathVariable transaction: Int): GetTransaction{
+        return db.getTransactionByID(transaction)
+}
 
 //    TRANSACTIONS
     @CrossOrigin(origins = ["https://ampervolt.putelita.pl","https://kernelpanic.putelita.pl"])
     @GetMapping("/users/{login}/{account}/transactions", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getTransactions(@PathVariable account: String): ArrayList<GetTransactions>{
+    fun getTransactions(@PathVariable account: String): ArrayList<GetTransaction>{
         return db.getTransactions(account)
     }
 

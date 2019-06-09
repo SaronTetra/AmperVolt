@@ -3,8 +3,7 @@ package com.kernelpanic.nfcbanksim.Database
 import com.kernelpanic.nfcbanksim.GET.GetAccount
 import com.kernelpanic.nfcbanksim.GET.GetCard
 import com.kernelpanic.nfcbanksim.GET.GetClient
-import com.kernelpanic.nfcbanksim.GET.GetTransactions
-import org.hibernate.validator.internal.util.Contracts.assertTrue
+import com.kernelpanic.nfcbanksim.GET.GetTransaction
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -174,8 +173,8 @@ class BankDatabase {
         }
     }
 
-    fun getTransactions(account: String): ArrayList<GetTransactions>{
-        val result = arrayListOf<GetTransactions>()
+    fun getTransactions(account: String): ArrayList<GetTransaction>{
+        val result = arrayListOf<GetTransaction>()
         transaction {
             Bank_Transaction.select{
                 (Bank_Transaction.from_account like getAccountByNumber(account).number) or
@@ -186,7 +185,7 @@ class BankDatabase {
                 val fromAcc = it[Bank_Transaction.from_account]
                 val toAcc = it[Bank_Transaction.to_account]
                 val money: Double = it[Bank_Transaction.money]
-                result.add(GetTransactions(it[Bank_Transaction.id].value,
+                result.add(GetTransaction(it[Bank_Transaction.id].value,
                         fromAcc,
                         toAcc,
                         if(fromAcc == account && it[Bank_Transaction.type] != 1){
@@ -314,6 +313,25 @@ class BankDatabase {
                          it[Card.uuid]
                         ))
                     }
+        }
+        return result
+    }
+
+    fun getTransactionByID(transaction: Int): GetTransaction {
+        val result = GetTransaction()
+        //TODO: add target by account number
+        transaction {
+            Bank_Transaction.select{
+                (Bank_Transaction.id eq transaction)
+            }.forEach{
+                result.id = it[Bank_Transaction.id].value
+                result.from = it[Bank_Transaction.from_account]
+                result.to = it[Bank_Transaction.to_account]
+                result.money = it[Bank_Transaction.money]
+                result.type_id = it[Bank_Transaction.type]
+                result.title = it[Bank_Transaction.title]
+                result.orderDate = it[Bank_Transaction.order_date].toString()
+            }
         }
         return result
     }

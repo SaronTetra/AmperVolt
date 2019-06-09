@@ -1,20 +1,11 @@
 package com.kernelpanic.nfcbanksim
 
-import com.kernelpanic.nfcbanksim.Cards.generateCardNumber
 import com.kernelpanic.nfcbanksim.Database.BankDatabase
-import com.kernelpanic.nfcbanksim.GET.GetCard
-import com.kernelpanic.nfcbanksim.GET.GetClient
-import com.kernelpanic.nfcbanksim.GET.GetTransactions
 import com.kernelpanic.nfcbanksim.POST_PUT.*
 import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
-import java.util.*
-import java.util.concurrent.ThreadLocalRandom
-import java.util.concurrent.atomic.AtomicLong
 
 @RestController
 class UserController {
