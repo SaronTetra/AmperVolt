@@ -76,6 +76,7 @@ class BankDatabase {
             Account
                     .select{Account.number like number}
                     .forEach {
+                        result.id = it[Account.id].value
                         result.number = it[Account.number]
                         result.balance = it[Account.balance]
                         result.owner_id = it[Account.owner_id]
@@ -288,11 +289,31 @@ class BankDatabase {
             Account.select{Account.owner_id eq getByLogin(login).id}
                     .forEach {
                         result.add(GetAccount(
+                                it[Account.id].value,
                                 it[Account.number],
                                 it[Account.balance],
                                 it[Account.owner_id]
                         ))
             }
+        }
+        return result
+    }
+
+    fun getCards(account: String): ArrayList<GetCard> {
+        val result = arrayListOf<GetCard>()
+        transaction{
+            Card.select {Card.ownerAccountID eq getAccountByNumber(account).id }
+                    .forEach{
+                        result.add(GetCard(
+                         it[Card.number],
+                         it[Card.creationDate].toString(),
+                         it[Card.expirationDate].toString(),
+                         it[Card.cvc],
+                         it[Card.ownerAccountID],
+                         it[Card.pin],
+                         it[Card.uuid]
+                        ))
+                    }
         }
         return result
     }

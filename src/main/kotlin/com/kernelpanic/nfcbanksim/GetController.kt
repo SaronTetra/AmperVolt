@@ -57,7 +57,11 @@ class GetController {
 
 
 //    CARDS
-
+    @CrossOrigin(origins = ["https://ampervolt.putelita.pl","https://kernelpanic.putelita.pl"])
+    @GetMapping("/users/{login}/{account}/cards/", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getCards(@PathVariable login: String, @PathVariable account: String): ArrayList<GetCard> {
+        return db.getCards(account)
+    }
 
 //    TRANSACTION
 
