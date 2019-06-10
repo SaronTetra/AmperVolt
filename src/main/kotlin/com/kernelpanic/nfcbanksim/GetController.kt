@@ -73,4 +73,12 @@ class GetController {
         return db.getTransactions(account)
     }
 
+
+//    TRANSACTION TYPE
+    @CrossOrigin(origins = ["https://ampervolt.putelita.pl","https://kernelpanic.putelita.pl"])
+    @GetMapping("/transactions/type/{type}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getTransactionType(@PathVariable type: Int): GetTransactionType {
+        return db.getTransactionType(type)
+    }
+
 }
