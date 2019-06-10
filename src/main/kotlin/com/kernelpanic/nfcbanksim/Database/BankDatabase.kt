@@ -41,7 +41,10 @@ class BankDatabase {
                 it[this.password] = password
             }
 
-            val detailsId = Client_Details.insertAndGetId {
+//            Client_Details.id
+            val detailsId = Client_Details.insert{
+
+                it[this.id] = clientId
                 it[this.name] = name
                 it[this.surname] = surname
 //                it[this.avatar] = avatar
@@ -338,11 +341,12 @@ class BankDatabase {
 
     fun deleteAll(){
         transaction {
-            Client.deleteAll()
+            Card.deleteAll()
             Account.deleteAll()
             Client_Details.deleteAll()
+            Client.deleteAll()
             Bank_Transaction.deleteAll()
-            Card.deleteAll()
+
 
         }
     }
