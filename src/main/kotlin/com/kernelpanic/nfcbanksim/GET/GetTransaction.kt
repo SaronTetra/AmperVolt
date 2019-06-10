@@ -7,6 +7,7 @@ class GetTransaction(var id: Int = -1,
                      var type_id: Int = 0,
                      var title: String = "",
                      var orderDate: String  = "",
-                     var target: String = ""
+                     var target: String = "",
+                     var type: GetTransactionType = GetTransactionType()
 ){
 }

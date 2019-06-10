@@ -208,7 +208,8 @@ class BankDatabase {
                         }
                         else{
                             fromAcc
-                        }
+                        },
+                        getTransactionType(it[Bank_Transaction.type])
                 )
                 )
 
@@ -337,6 +338,7 @@ class BankDatabase {
                 result.type_id = it[Bank_Transaction.type]
                 result.title = it[Bank_Transaction.title]
                 result.orderDate = it[Bank_Transaction.order_date].toString()
+                result.type = getTransactionType(it[Bank_Transaction.type])
             }
         }
         return result
