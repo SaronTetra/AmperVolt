@@ -1,9 +1,6 @@
 package com.kernelpanic.nfcbanksim.Database
 
-import com.kernelpanic.nfcbanksim.GET.GetAccount
-import com.kernelpanic.nfcbanksim.GET.GetCard
-import com.kernelpanic.nfcbanksim.GET.GetClient
-import com.kernelpanic.nfcbanksim.GET.GetTransaction
+import com.kernelpanic.nfcbanksim.GET.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -86,25 +83,34 @@ class BankDatabase {
     }
 
 
-//
-//    fun getUserByID(id: Int): GetClient {
-//
-//        val result = GetClient()
-//                transaction {
-//            Client.select { Client.id eq id }
-//                    .forEach {
-//                        result.id = it[Client.id].value
-//                        result.name = it[Client.name]
-//                        result.login = it[Client.login]
-//                        result.creationDate = it[Client.creationDate].toString()
-//                        result.balance = it[Client.balance]
-//
-//                    }
-////            println("Name: ${result.name}\tBalance ${result.balance}")
-//        }
-//        return result
-//    }
-//
+
+    fun getUserByID(id: Int): GetClient {
+
+        val result = GetClient()
+                transaction {
+            Client.select { Client.id eq id }
+                    .forEach {
+                        result.id = it[Client.id].value
+                        result.login = it[Client.login]
+                        result.creationDate = it[Client.creationDate].toString()
+                    }
+        }
+        return result
+    }
+
+    fun  getUserByLogin(login: String): GetClient {
+
+        val result = GetClient()
+                transaction {
+            Client.select { Client.login like login }
+                    .forEach {
+                        result.id = it[Client.id].value
+                        result.login = it[Client.login]
+                        result.creationDate = it[Client.creationDate].toString()
+                    }
+        }
+        return result
+    }
 
     fun putMoney(accountNumber: String, moneyPut: Double) {
         transaction {
@@ -333,6 +339,21 @@ class BankDatabase {
                 result.orderDate = it[Bank_Transaction.order_date].toString()
             }
         }
+        return result
+    }
+
+    fun getUserDetails(login: String): GetClientDetails {
+        val result = GetClientDetails()
+        transaction{
+            Client_Details.select{ Client_Details.id eq getUserByLogin(login).id }
+                    .forEach {
+                        result.id = it[Client_Details.id].value
+                        result.name = it[Client_Details.name]
+                        result.surname = it[Client_Details.surname]
+                        result.avatar_filepath = it[Client_Details.avatar_filepath]
+                    }
+        }
+
         return result
     }
 }

@@ -1,10 +1,7 @@
 package com.kernelpanic.nfcbanksim
 
 import com.kernelpanic.nfcbanksim.Database.BankDatabase
-import com.kernelpanic.nfcbanksim.GET.GetAccount
-import com.kernelpanic.nfcbanksim.GET.GetCard
-import com.kernelpanic.nfcbanksim.GET.GetClient
-import com.kernelpanic.nfcbanksim.GET.GetTransaction
+import com.kernelpanic.nfcbanksim.GET.*
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RestController
@@ -28,6 +25,12 @@ class GetController {
         return db.getUsers()
     }
 
+
+//    CLIENT DETAILS
+    @GetMapping("users/{login}/details", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getUserDetails(@PathVariable login: String) : GetClientDetails {
+        return db.getUserDetails(login)
+    }
 
 //    ACCOUNT
     @GetMapping("users/{login}/{account}", produces = [MediaType.APPLICATION_JSON_VALUE])
