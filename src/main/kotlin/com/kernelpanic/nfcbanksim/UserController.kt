@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.atomic.AtomicLong
+import kotlin.math.log
 
 @RestController
 class UserController {
@@ -81,6 +82,90 @@ class UserController {
 //    }
 //
 //
+
+    /**
+     * DEVELOPER ONLY - DELETE ALL CLIENTS
+     * */
+    @DeleteMapping("/dev/delete-clients")
+    @ResponseBody
+    fun deleteAllClients(): ResponseEntity<Unit>{
+        db.deleteAllClients()
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    @DeleteMapping("/dev/delete-client")
+    @ResponseBody
+    fun deleteClient(@RequestBody login: Str): ResponseEntity<Unit>{
+        db.deleteClient(login.data)
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+
+
+    /**
+     * DEVELOPER ONLY - DELETE ALL ACCOUNTS
+     * */
+
+    @DeleteMapping("/dev/delete-accounts")
+    @ResponseBody
+    fun deleteAllAccounts(): ResponseEntity<Unit>{
+        db.deleteAllAccounts()
+        return ResponseEntity(HttpStatus.OK)
+    }
+    @DeleteMapping("/dev/delete-account")
+    @ResponseBody
+    fun deleteAccount(@RequestBody login: Str): ResponseEntity<Unit>{
+        db.deleteAccount(login.data)
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    /**
+     * DEVELOPER ONLY - DELETE ALL BANK TRANSACTIONS
+     * */
+    @DeleteMapping("/dev/delete-bank-transactions")
+    @ResponseBody
+    fun deleteAllBankTransactions(): ResponseEntity<Unit>{
+        db.deleteAllBank_Transactions()
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    @DeleteMapping("/dev/delete-transaction")
+    @ResponseBody
+    fun deleteTransaction(@RequestBody login: Str): ResponseEntity<Unit>{
+        db.deleteBank_Transaction(login.data)
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    /**
+     * DEVELOPER ONLY - DELETE ALL CARDS
+     * */
+    @DeleteMapping("/dev/delete-cards")
+    @ResponseBody
+    fun deleteAllCards(): ResponseEntity<Unit>{
+        db.deleteAllCards()
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    @DeleteMapping("/dev/delete-card")
+    @ResponseBody
+    fun deleteCard(@RequestBody login: Str): ResponseEntity<Unit>{
+        db.deleteCard(login.data)
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    /**
+     * DEVELOPER ONLY - DELETE ALL CARDS
+     * */
+    @DeleteMapping("/dev/delete-all")
+    @ResponseBody
+    fun deleteAll(): ResponseEntity<Unit>{
+        db.deleteAll()
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+
+
+
     @PutMapping("/put-money")
     @ResponseBody
     fun putMoney(@RequestBody putMoneyJSON: PutMoneyJSON): ResponseEntity<Unit>{
@@ -110,7 +195,7 @@ class UserController {
     }
 
 @CrossOrigin(origins = ["https://ampervolt.putelita.pl","https://kernelpanic.putelita.pl"])
-    @GetMapping("/users/{login}/{account}/transactions", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping("/users/{login}/{account}/transaction", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getTransactions(@PathVariable account: String): ArrayList<GetTransactions>{
         return db.getTransactions(account)
     }

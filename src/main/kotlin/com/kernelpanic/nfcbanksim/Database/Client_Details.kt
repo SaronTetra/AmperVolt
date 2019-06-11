@@ -6,5 +6,5 @@ object Client_Details: IntIdTable() {
 
     val name = varchar("name", 32)
     val surname = varchar("surname", 32)
-    val avatar = blob("avatar")
+    val avatar_filepath = varchar("avatar_filepath", 32)
 }

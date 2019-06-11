@@ -39,12 +39,8 @@ class BankDatabase {
             val clientId = Client.insertAndGetId {
                 it[this.login] = login
                 it[this.password] = password
-            }
-
-            val detailsId = Client_Details.insertAndGetId {
                 it[this.name] = name
                 it[this.surname] = surname
-//                it[this.avatar] = avatar
             }
 
         }
@@ -298,5 +294,72 @@ class BankDatabase {
 
         doTransaction(getAccountByID(card.ownerID).number, destinationAccount, moneyAmount, title)
     }
+
+
+    /**
+    * DEVELOPER ONLY - DELETE CLIENTS
+    * */
+    fun deleteAllClients(){
+        transaction {
+            Client.deleteAll()
+        }
+    }
+
+    fun deleteClient(login: String){
+        transaction {
+            Client.deleteWhere { Client.login like login }
+        }
+    }
+
+    /**
+     * DEVELOPER ONLY - DELETE ALL ACCOUNTS
+     * */
+    fun deleteAllAccounts(){
+        transaction {
+            Account.deleteAll()
+        }
+    }
+    fun deleteAccount(number: String){
+        transaction {
+            Account.deleteWhere { Account.number like number }
+        }
+    }
+
+    fun deleteAllBank_Transactions(){
+        transaction {
+            Bank_Transaction.deleteAll()
+        }
+    }
+    fun deleteBank_Transaction(id: String){
+        val idInt = id.toInt()
+        transaction {
+            Bank_Transaction.deleteWhere { Bank_Transaction.id eq idInt }
+        }
+    }
+
+    fun deleteAllCards(){
+        transaction {
+            Card.deleteAll()
+        }
+    }
+
+    fun deleteCard(uuid: String){
+        transaction {
+            Card.deleteWhere { Card.uuid like uuid }
+        }
+    }
+
+    fun deleteAll(){
+        transaction {
+            Card.deleteAll()
+            Account.deleteAll()
+            Client.deleteAll()
+            Bank_Transaction.deleteAll()
+
+
+        }
+    }
 }
+
+
 
