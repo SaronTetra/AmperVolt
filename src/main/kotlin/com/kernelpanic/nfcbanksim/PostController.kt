@@ -20,7 +20,8 @@ class PostController {
 
 
 //    CLIENT
-    @PostMapping("/signup",
+    @CrossOrigin("*")
+    @PostMapping("/users",
             consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     fun signUp(@RequestBody signUp: SignUp): ResponseEntity<Unit> {
@@ -32,7 +33,7 @@ class PostController {
 
 
 //    ACCOUNT
-    @PostMapping("/users/{login}/new-account")
+    @PostMapping("/users/{login}/accounts")
     fun newAccount(@PathVariable login: String ): ResponseEntity<Unit>{
 
         //generate
@@ -51,7 +52,7 @@ class PostController {
 
 
 //    CARD
-    @PostMapping("/users/{login}/{account}/add-card",
+    @PostMapping("/users/{login}/{account}/cards",
             consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     fun addCard(@PathVariable login:String, @PathVariable account: String, @RequestBody newCard: AddCard): ResponseEntity<Unit>{
@@ -62,7 +63,7 @@ class PostController {
     }
 
 //    TRANSACTION
-    @PutMapping("users/{login}/{account}/transaction")
+    @PutMapping("users/{login}/{account}/transactions")
     @ResponseBody
     fun transaction(@PathVariable login: String, @PathVariable account: String,
                     @RequestBody transactionJSON: TransactionJSON): ResponseEntity<Unit>{
