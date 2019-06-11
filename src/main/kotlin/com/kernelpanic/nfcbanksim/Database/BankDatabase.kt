@@ -308,7 +308,6 @@ class BankDatabase {
         transaction {
             Client.deleteWhere { Client.login like login }
         }
-        println("Deleted: "+login)
     }
 
     /**
@@ -319,16 +318,33 @@ class BankDatabase {
             Account.deleteAll()
         }
     }
-
+    fun deleteAccount(number: String){
+        transaction {
+            Account.deleteWhere { Account.number like number }
+        }
+    }
 
     fun deleteAllBank_Transactions(){
         transaction {
             Bank_Transaction.deleteAll()
         }
     }
+    fun deleteBank_Transaction(id: String){
+        val idInt = id.toInt()
+        transaction {
+            Bank_Transaction.deleteWhere { Bank_Transaction.id eq idInt }
+        }
+    }
+
     fun deleteAllCards(){
         transaction {
             Card.deleteAll()
+        }
+    }
+
+    fun deleteCard(uuid: String){
+        transaction {
+            Card.deleteWhere { Card.uuid like uuid }
         }
     }
 

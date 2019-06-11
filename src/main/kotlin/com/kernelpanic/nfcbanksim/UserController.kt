@@ -112,7 +112,12 @@ class UserController {
         db.deleteAllAccounts()
         return ResponseEntity(HttpStatus.OK)
     }
-
+    @DeleteMapping("/dev/delete-account")
+    @ResponseBody
+    fun deleteAccount(@RequestBody login: Str): ResponseEntity<Unit>{
+        db.deleteAccount(login.data)
+        return ResponseEntity(HttpStatus.OK)
+    }
 
     /**
      * DEVELOPER ONLY - DELETE ALL BANK TRANSACTIONS
@@ -124,6 +129,13 @@ class UserController {
         return ResponseEntity(HttpStatus.OK)
     }
 
+    @DeleteMapping("/dev/delete-transaction")
+    @ResponseBody
+    fun deleteTransaction(@RequestBody login: Str): ResponseEntity<Unit>{
+        db.deleteBank_Transaction(login.data)
+        return ResponseEntity(HttpStatus.OK)
+    }
+
     /**
      * DEVELOPER ONLY - DELETE ALL CARDS
      * */
@@ -131,6 +143,13 @@ class UserController {
     @ResponseBody
     fun deleteAllCards(): ResponseEntity<Unit>{
         db.deleteAllCards()
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    @DeleteMapping("/dev/delete-card")
+    @ResponseBody
+    fun deleteCard(@RequestBody login: Str): ResponseEntity<Unit>{
+        db.deleteCard(login.data)
         return ResponseEntity(HttpStatus.OK)
     }
 
