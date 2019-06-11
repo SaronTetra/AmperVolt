@@ -23,4 +23,6 @@ object Client: IntIdTable() {
     val login = varchar("login", 32)
     val password = varchar("password", 256)
     val creationDate = datetime("creationDate")
+    val name = varchar("name", 32)
+    val surname = varchar("surname", 32)
 }
