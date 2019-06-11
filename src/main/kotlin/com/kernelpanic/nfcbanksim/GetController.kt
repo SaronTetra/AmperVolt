@@ -34,8 +34,9 @@ class GetController {
 
 //    ACCOUNT
     @GetMapping("users/{login}/{account}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getAccountByNumber(@PathVariable login: String, @PathVariable account:String) : GetAccount {
-        return db.getAccountByNumber(account)
+    fun getAccountByNumber(@PathVariable account:String) : GetAccount {
+//    @PathVariable login: String,
+    return db.getAccountByNumber(account)
     }
 
 //    ACCOUNTS
