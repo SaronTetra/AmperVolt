@@ -20,17 +20,13 @@ class GetController {
 
 
 //    CLIENTS
-    @GetMapping("users/", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @CrossOrigin("*")
+    @GetMapping("users", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getUserByLogin() : ArrayList<GetClient> {
         return db.getUsers()
     }
 
 
-//    CLIENT DETAILS
-    @GetMapping("users/{login}/details", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getUserDetails(@PathVariable login: String) : GetClientDetails {
-        return db.getUserDetails(login)
-    }
 
 //    ACCOUNT
     @GetMapping("users/{login}/{account}", produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -62,7 +58,7 @@ class GetController {
 
 //    TRANSACTION
     @CrossOrigin(origins = ["https://ampervolt.putelita.pl","https://kernelpanic.putelita.pl"])
-    @GetMapping("/users/{login}/{account}/{transaction}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping("/users/{login}/{account}/transactions/{transaction}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getTransactionByID(@PathVariable account: String, @PathVariable transaction: Int): GetTransaction{
         return db.getTransactionByID(transaction)
 }
