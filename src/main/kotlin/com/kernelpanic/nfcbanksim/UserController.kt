@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.atomic.AtomicLong
+import kotlin.math.log
 
 @RestController
 class UserController {
@@ -92,6 +93,15 @@ class UserController {
         return ResponseEntity(HttpStatus.OK)
     }
 
+    @DeleteMapping("/dev/delete-client")
+    @ResponseBody
+    fun deleteClient(@RequestBody login: Str): ResponseEntity<Unit>{
+        db.deleteClient(login.data)
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+
+
     /**
      * DEVELOPER ONLY - DELETE ALL ACCOUNTS
      * */
@@ -103,15 +113,6 @@ class UserController {
         return ResponseEntity(HttpStatus.OK)
     }
 
-    /**
-     * DEVELOPER ONLY - DELETE ALL CLIENT DETAILS
-     * */
-    @DeleteMapping("/dev/delete-client-details")
-    @ResponseBody
-    fun deleteAllClientDetails(): ResponseEntity<Unit>{
-        db.deleteAllClient_Details()
-        return ResponseEntity(HttpStatus.OK)
-    }
 
     /**
      * DEVELOPER ONLY - DELETE ALL BANK TRANSACTIONS
@@ -175,7 +176,7 @@ class UserController {
 //    }
 //
 @CrossOrigin(origins = ["https://ampervolt.putelita.pl","https://kernelpanic.putelita.pl"])
-    @GetMapping("/users/{login}/{account}/transactions", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping("/users/{login}/{account}/transaction", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getTransactions(@PathVariable account: String): ArrayList<GetTransactions>{
         return db.getTransactions(account)
     }

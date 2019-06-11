@@ -39,15 +39,8 @@ class BankDatabase {
             val clientId = Client.insertAndGetId {
                 it[this.login] = login
                 it[this.password] = password
-            }
-
-//            Client_Details.id
-            val detailsId = Client_Details.insert{
-
-                it[this.id] = clientId
                 it[this.name] = name
                 it[this.surname] = surname
-//                it[this.avatar] = avatar
             }
 
         }
@@ -303,12 +296,19 @@ class BankDatabase {
 
 
     /**
-    * DEVELOPER ONLY - DELETE ALL CLIENTS
+    * DEVELOPER ONLY - DELETE CLIENTS
     * */
     fun deleteAllClients(){
         transaction {
             Client.deleteAll()
         }
+    }
+
+    fun deleteClient(login: String){
+        transaction {
+            Client.deleteWhere { Client.login like login }
+        }
+        println("Deleted: "+login)
     }
 
     /**
@@ -319,14 +319,7 @@ class BankDatabase {
             Account.deleteAll()
         }
     }
-    /**
-     * DEVELOPER ONLY - DELETE ALL CLIENT DETAILS
-     * */
-    fun deleteAllClient_Details(){
-        transaction {
-            Client_Details.deleteAll()
-        }
-    }
+
 
     fun deleteAllBank_Transactions(){
         transaction {
@@ -343,7 +336,6 @@ class BankDatabase {
         transaction {
             Card.deleteAll()
             Account.deleteAll()
-            Client_Details.deleteAll()
             Client.deleteAll()
             Bank_Transaction.deleteAll()
 
