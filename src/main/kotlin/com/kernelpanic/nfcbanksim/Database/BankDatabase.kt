@@ -358,9 +358,9 @@ class BankDatabase {
 
     fun getTransactionType(type_id: Int): GetTransactionType {
         val result = GetTransactionType()
-        transaction{
-            Type.select{ Type.id eq type_id }
-                    .forEach{
+        transaction {
+            Type.select { Type.id eq type_id }
+                    .forEach {
                         result.id = it[Type.id].value
                         result.abbr = it[Type.abbr]
                         result.name = it[Type.name]
@@ -368,7 +368,7 @@ class BankDatabase {
         }
 
         return result
-
+    }
 
     /**
     * DEVELOPER ONLY - DELETE CLIENTS
