@@ -1,10 +1,6 @@
 package com.kernelpanic.nfcbanksim.Database
 
-import com.kernelpanic.nfcbanksim.GET.GetAccount
-import com.kernelpanic.nfcbanksim.GET.GetCard
-import com.kernelpanic.nfcbanksim.GET.GetClient
-import com.kernelpanic.nfcbanksim.GET.GetTransactions
-import org.hibernate.validator.internal.util.Contracts.assertTrue
+import com.kernelpanic.nfcbanksim.GET.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -19,18 +15,6 @@ class BankDatabase {
 
     }
 
-
-
-//    fun printAllClients() { TODO test join with name and surname
-//
-//        transaction {
-//            Client
-//                    .selectAll()
-//                    .forEach {
-//                println("Client: " + it[Client.login] + "\tBalance: " + it[Client.balance])
-//            }
-//        }
-//    }
 
     fun signUp(name: String, surname: String, login: String, password: String) {
 
@@ -48,6 +32,7 @@ class BankDatabase {
 
 
     }
+
     fun createAccount(login: String, number: String){
 
         //TODO find id from login
@@ -61,9 +46,6 @@ class BankDatabase {
         }
     }
 
-
-
-
     fun getByLogin(login: String): GetClient {
 
         val result = GetClient()
@@ -75,7 +57,6 @@ class BankDatabase {
                         result.login = it[Client.login]
                         result.creationDate = it[Client.creationDate].toString()
                     }
-//            println("Name: ${result.name}\tBalance ${result.balance}")
         }
         return result
     }
@@ -87,6 +68,7 @@ class BankDatabase {
             Account
                     .select{Account.number like number}
                     .forEach {
+                        result.id = it[Account.id].value
                         result.number = it[Account.number]
                         result.balance = it[Account.balance]
                         result.owner_id = it[Account.owner_id]
@@ -97,42 +79,35 @@ class BankDatabase {
     }
 
 
-//
-//    fun getUserByID(id: Int): GetClient {
-//
-//        val result = GetClient()
-//                transaction {
-//            Client.select { Client.id eq id }
-//                    .forEach {
-//                        result.id = it[Client.id].value
-//                        result.name = it[Client.name]
-//                        result.login = it[Client.login]
-//                        result.creationDate = it[Client.creationDate].toString()
-//                        result.balance = it[Client.balance]
-//
-//                    }
-////            println("Name: ${result.name}\tBalance ${result.balance}")
-//        }
-//        return result
-//    }
-//
-//    fun deleteAccount(login: String) {
-//        transaction {
-//            Client
-//                    .select { Client.login like login }
-//                    .forEach { itr ->
-//                ExClient.insertAndGetId {
-//                    it[this.name] = itr[Client.name]
-//                    it[this.login] = itr[Client.login]
-//                    it[this.created] = itr[Client.creationDate]
-//                    it[this.previousID] = itr[Client.id].value
-//                }
-//
-//            }
-//            Client.deleteWhere { Client.login like login }
-//        }
-//    }
-//
+
+    fun getUserByID(id: Int): GetClient {
+
+        val result = GetClient()
+                transaction {
+            Client.select { Client.id eq id }
+                    .forEach {
+                        result.id = it[Client.id].value
+                        result.login = it[Client.login]
+                        result.creationDate = it[Client.creationDate].toString()
+                    }
+        }
+        return result
+    }
+
+    fun  getUserByLogin(login: String): GetClient {
+
+        val result = GetClient()
+                transaction {
+            Client.select { Client.login like login }
+                    .forEach {
+                        result.id = it[Client.id].value
+                        result.login = it[Client.login]
+                        result.creationDate = it[Client.creationDate].toString()
+                    }
+        }
+        return result
+    }
+
     fun putMoney(accountNumber: String, moneyPut: Double) {
         transaction {
 
@@ -200,8 +175,8 @@ class BankDatabase {
         }
     }
 
-    fun getTransactions(account: String): ArrayList<GetTransactions>{
-        val result = arrayListOf<GetTransactions>()
+    fun getTransactions(account: String): ArrayList<GetTransaction>{
+        val result = arrayListOf<GetTransaction>()
         transaction {
             Bank_Transaction.select{
                 (Bank_Transaction.from_account like getAccountByNumber(account).number) or
@@ -212,7 +187,7 @@ class BankDatabase {
                 val fromAcc = it[Bank_Transaction.from_account]
                 val toAcc = it[Bank_Transaction.to_account]
                 val money: Double = it[Bank_Transaction.money]
-                result.add(GetTransactions(it[Bank_Transaction.id].value,
+                result.add(GetTransaction(it[Bank_Transaction.id].value,
                         fromAcc,
                         toAcc,
                         if(fromAcc == account && it[Bank_Transaction.type] != 1){
@@ -229,7 +204,8 @@ class BankDatabase {
                         }
                         else{
                             fromAcc
-                        }
+                        },
+                        getTransactionType(it[Bank_Transaction.type])
                 )
                 )
 
@@ -248,7 +224,7 @@ class BankDatabase {
                 it[this.creationDate] = DateTime.now()
                 it[this.expirationDate] = DateTime.now() + 31556926000 * 2 //TODO: Find a bettter way to add 2 years to a date
                 it[this.cvc] = cvc
-                it[this.ownerAccountID] = getAccountByNumber(ownerAccount).owner_id
+                it[this.ownerAccountID] = getAccountByNumber(ownerAccount).id
                 it[this.pin] = pin
                 it[this.uuid] = UUID.randomUUID().toString()
             }
@@ -295,6 +271,104 @@ class BankDatabase {
         doTransaction(getAccountByID(card.ownerID).number, destinationAccount, moneyAmount, title)
     }
 
+
+    fun getUsers(): ArrayList<GetClient> {
+        val result = arrayListOf<GetClient>()
+        transaction{
+            Client.selectAll().forEach{
+                result.add(GetClient(
+                 it[Client.id].value,
+                 it[Client.login],
+                 it[Client.creationDate].toString()
+                ))
+            }
+        }
+        return result
+    }
+
+    fun getAccounts(login: String): ArrayList<GetAccount> {
+        val result = arrayListOf<GetAccount>()
+        transaction {
+            Account.select{Account.owner_id eq getByLogin(login).id}
+                    .forEach {
+                        result.add(GetAccount(
+                                it[Account.id].value,
+                                it[Account.number],
+                                it[Account.balance],
+                                it[Account.owner_id]
+                        ))
+            }
+        }
+        return result
+    }
+
+    fun getCards(account: String): ArrayList<GetCard> {
+        val result = arrayListOf<GetCard>()
+        transaction{
+            Card.select {Card.ownerAccountID eq getAccountByNumber(account).id }
+                    .forEach{
+                        result.add(GetCard(
+                         it[Card.number],
+                         it[Card.creationDate].toString(),
+                         it[Card.expirationDate].toString(),
+                         it[Card.cvc],
+                         it[Card.ownerAccountID],
+                         it[Card.pin],
+                         it[Card.uuid]
+                        ))
+                    }
+        }
+        return result
+    }
+
+    fun getTransactionByID(transaction: Int): GetTransaction {
+        val result = GetTransaction()
+        //TODO: add target by account number
+        transaction {
+            Bank_Transaction.select{
+                (Bank_Transaction.id eq transaction)
+            }.forEach{
+                result.id = it[Bank_Transaction.id].value
+                result.from = it[Bank_Transaction.from_account]
+                result.to = it[Bank_Transaction.to_account]
+                result.money = it[Bank_Transaction.money]
+                result.type_id = it[Bank_Transaction.type]
+                result.title = it[Bank_Transaction.title]
+                result.orderDate = it[Bank_Transaction.order_date].toString()
+                result.type = getTransactionType(it[Bank_Transaction.type])
+            }
+        }
+        return result
+    }
+
+    fun getUserDetails(login: String): GetClientDetails {
+        val result = GetClientDetails()
+        transaction{
+            Client_Details.select{ Client_Details.id eq getUserByLogin(login).id }
+                    .forEach {
+                        result.id = it[Client_Details.id].value
+                        result.name = it[Client_Details.name]
+                        result.surname = it[Client_Details.surname]
+                        result.avatar_filepath = it[Client_Details.avatar_filepath]
+                    }
+        }
+
+        return result
+    }
+
+    fun getTransactionType(type_id: Int): GetTransactionType {
+        val result = GetTransactionType()
+        transaction {
+            Type.select { Type.id eq type_id }
+                    .forEach {
+                        result.id = it[Type.id].value
+                        result.abbr = it[Type.abbr]
+                        result.name = it[Type.name]
+                    }
+        }
+
+        return result
+    }
 
     /**
     * DEVELOPER ONLY - DELETE CLIENTS
@@ -358,6 +432,7 @@ class BankDatabase {
 
 
         }
+
     }
 }
 

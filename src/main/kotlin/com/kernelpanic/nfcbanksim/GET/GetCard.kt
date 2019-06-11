@@ -1,6 +1,7 @@
 package com.kernelpanic.nfcbanksim.GET
 
-class GetCard(var id: Int = -1,
+class GetCard(
+//        var id: Int = -1,
               var number: String = "",
               var creationDate: String = "",
               var expirationDate: String = "",

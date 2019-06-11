@@ -6,6 +6,14 @@ plugins {
 
 apply plugin: 'io.spring.dependency-management'
 
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.kernelpanic.nfcbanksim.NfcbanksimApplicationKt'
+        )
+    }
+}
+
 group = 'com.kernelpanic'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
@@ -31,6 +39,8 @@ dependencies {
     compile 'org.jetbrains.exposed:exposed:0.13.7'
     compile "mysql:mysql-connector-java:5.1.46"
 }
+
+
 
 dependencyManagement {
     imports {
