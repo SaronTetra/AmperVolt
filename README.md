@@ -12,8 +12,9 @@ Frontend source code can be viewed here:
 1. IntelliJ IDEA Ultimate
 2. DataGrip 2018.3.4
 3. Postman
-4. VPS with Debian and MySQL
+4. VPS with Debian
 6. Android device with NFC and Chrome
+7. Docker
 
 ## Example Endpoints
 GET `/users` - gets a list of all users  
@@ -32,14 +33,19 @@ DELETE `/users/{login}/{account}/transactions` - deletes all transactions
 * Restart Chrome 
 
 ## How to compile and run
-Firstly create jar file (you need JDK8): with console enter folder with project and then type `.\gradlew bootJar`
-then to run type `java -jar filename.jar`
+To run AmperVolt you will need to install Docker, Oracle JDK11 and Maven
+
+* go to root folder of project
+* run docker container with MySQL using command `sudo docker-compose -f docker-compose.yml up`
+* create jar file with command `mvn pakcage`
+* `cd av-services/target`
+* run jar `java -jar filename.jar`
 
 ## Attributions
 [KotlinLang](https://kotlinlang.org/docs/tutorials/spring-boot-restful.html)  
 [DigitalOcean tutorials](https://www.digitalocean.com/community/tutorials/)  
-[Exposed Wiki](https://github.com/JetBrains/Exposed/wiki)
+[Baeldung](https://www.baeldung.com/)
+
 ## Credits
 [Mateusz Ostrowski](https://github.com/matostr98) &
 [Maciej Stosik](https://github.com/SaronTetra)
-

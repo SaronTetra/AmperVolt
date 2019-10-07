@@ -17,7 +17,6 @@ class Client {
     @Column(name = "uuid")
     @Type(type="uuid-char")
     val uuid: UUID? = null
-//    val uuid: UUID = UUID.randomUUID()
 
     @Column(name = "login")
     val login: String? = null
