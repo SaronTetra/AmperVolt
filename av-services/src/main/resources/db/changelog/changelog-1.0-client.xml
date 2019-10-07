@@ -9,6 +9,9 @@
                 <constraints primaryKey="true"
                              nullable="false"/>
             </column>
+            <column name="uuid" type="VARCHAR2(36)">
+                <constraints nullable="false"/>
+            </column>
             <column name="login" type="VARCHAR(32)">
                 <constraints nullable="false"/>
             </column>
@@ -30,6 +33,7 @@
 
     <changeSet author="admin" id="2">
         <insert tableName="client">
+            <column name="uuid" value="cadf1e09-3ff9-4934-9cb4-743c3a475562"/>
             <column name="login" value="bilbo"/>
             <column name="password" value="bagend123"/>
             <column name="name" value="Bilbo"/>

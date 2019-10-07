@@ -9,6 +9,7 @@ import pl.putelita.ampervolt.avservices.client.repository.ClientRepository
 class ClientServiceImpl @Autowired constructor (private val clientRepository: ClientRepository): ClientService  {
 
     override fun getAll(): MutableList<Client> {
-        return clientRepository.findAll()
+        val clientList: MutableList<Client> = clientRepository.findAll()
+        return clientList
     }
 }

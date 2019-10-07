@@ -1,15 +1,23 @@
 package pl.putelita.ampervolt.avservices.client.model
 
+import org.hibernate.annotations.Type
 import java.time.LocalDateTime
+import java.util.*
 import javax.persistence.*
 
 @Entity
 @Table(name = "client")
 class Client {
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
+
+    @Column(name = "uuid")
+    @Type(type="uuid-char")
+    val uuid: UUID? = null
+//    val uuid: UUID = UUID.randomUUID()
 
     @Column(name = "login")
     val login: String? = null
