@@ -25,13 +25,13 @@ class Client {
     var password: String? = null
 
     @Column(name = "creation_date")
-    val creation_date: LocalDateTime = LocalDateTime.now()
+    val creationDate: LocalDateTime = LocalDateTime.now()
 
     @Column(name = "name")
     var name: String? = null
 
     @Column(name = "second_name")
-    var second_name: String? = null
+    var secondName: String? = null
 
     @Column(name = "surname")
     var surname: String? = null

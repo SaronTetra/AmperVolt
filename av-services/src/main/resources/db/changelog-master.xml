@@ -5,4 +5,5 @@
 
     <include file="db/changelog/changelog-1.0-client.xml"/>
     <include file="db/changelog/changelog-1.1-client.xml"/>
+    <include file="db/changelog/changelog-2.0-account.xml"/>
 </databaseChangeLog>

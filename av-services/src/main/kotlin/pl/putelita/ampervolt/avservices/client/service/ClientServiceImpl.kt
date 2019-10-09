@@ -39,7 +39,7 @@ class ClientServiceImpl @Autowired constructor (private val clientRepository: Cl
 
     fun setterClient(clientDB: Client, client: Client){
         clientDB.name = client.name
-        clientDB.second_name = client.second_name
+        clientDB.secondName = client.secondName
         clientDB.surname = client.surname
         clientDB.login = client.login
         clientDB.password = client.password
