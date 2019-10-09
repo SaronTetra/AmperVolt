@@ -37,7 +37,7 @@ To run AmperVolt you will need to install Docker, Oracle JDK11 and Maven
 
 * go to root folder of project
 * run docker container with MySQL using command `sudo docker-compose -f docker-compose.yml up`
-* create jar file with command `mvn pakcage`
+* create jar file with command `mvn package`
 * `cd av-services/target`
 * run jar `java -jar filename.jar`
 

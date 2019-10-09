@@ -16,23 +16,29 @@ class Client {
 
     @Column(name = "uuid")
     @Type(type="uuid-char")
-    val uuid: UUID? = null
+    var uuid: UUID? = UUID.randomUUID()
 
     @Column(name = "login")
-    val login: String? = null
+    var login: String? = null
 
     @Column(name = "password")
-    val password: String? = null
+    var password: String? = null
 
     @Column(name = "creation_date")
-    val creation_date: LocalDateTime? = null
+    val creation_date: LocalDateTime = LocalDateTime.now()
 
     @Column(name = "name")
-    val name: String? = null
+    var name: String? = null
 
     @Column(name = "second_name")
-    val second_name: String? = null
+    var second_name: String? = null
 
     @Column(name = "surname")
-    val surname: String? = null
+    var surname: String? = null
+
+    @Column(name = "removed")
+    var removed: Boolean = false
+
+    @Column(name = "remove_date")
+    var removeDate: LocalDateTime? = null
 }

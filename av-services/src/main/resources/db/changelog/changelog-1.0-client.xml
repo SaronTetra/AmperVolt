@@ -40,4 +40,14 @@
             <column name="surname" value="Baggins"/>
         </insert>
     </changeSet>
+
+    <changeSet id="3" author="admin">
+        <insert tableName="client">
+            <column name="uuid" value="123f1e09-3ff9-4934-9cb4-743c3a475562"/>
+            <column name="login" value="frodo"/>
+            <column name="password" value="onering"/>
+            <column name="name" value="Frodo"/>
+            <column name="surname" value="Baggins"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
