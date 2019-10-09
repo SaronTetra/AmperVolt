@@ -37,7 +37,7 @@ class ClientServiceImpl @Autowired constructor (private val clientRepository: Cl
         return clientRepository.save(clientDB)
     }
 
-    fun setterClient(clientDB: Client, client: Client){
+    fun setterClient(clientDB: Client, client: Client) {
         clientDB.name = client.name
         clientDB.secondName = client.secondName
         clientDB.surname = client.surname
