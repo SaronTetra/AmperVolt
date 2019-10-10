@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="admin" id="1">
+        <createTable tableName="account">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"
+                             nullable="false"/>
+            </column>
+            <column name="uuid" type="VARCHAR2(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_date" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="number" type="VARCHAR2(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="balance" type="FLOAT"/>
+            <column name="owner_id" type="BIGINT"/>
+            <column name="removed" type="boolean" defaultValueBoolean="false"/>
+            <column name="remove_date" type="datetime"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="account" baseColumnNames="owner_id" constraintName="fk_account_client"
+                                 referencedTableName="client" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="2" author="admin">
+        <insert tableName="account">
+            <column name="uuid" value="cadf1e09-3ff9-4934-9cb4-743c3a475562"/>
+            <column name="number" value="66619871648777850532598742"/>
+            <column name="balance" value="1230"/>
+            <column name="owner_id" value="1"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
