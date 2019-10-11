@@ -8,7 +8,9 @@ import java.util.*
 @Repository
 interface AccountRepository: JpaRepository<Account, Long> {
 
-    fun findByUuid(uuid: UUID): Account?
+    fun findByUuid(uuid: UUID?): Account?
 
     fun findByNumberIgnoreCase(number: String?): Account?
+
+    fun findByNumber(number: String?): Account?
 }

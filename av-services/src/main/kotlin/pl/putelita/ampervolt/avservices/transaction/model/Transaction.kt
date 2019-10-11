@@ -1,6 +1,7 @@
 package pl.putelita.ampervolt.avservices.transaction.model
 
 import org.hibernate.annotations.Type
+import pl.putelita.ampervolt.avservices.account.model.Account
 import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
@@ -24,11 +25,13 @@ class Transaction {
     @Column(name = "money")
     var money: Double = 0.0
 
-    @Column(name = "from_account")
-    var fromAccount: String? = null
+    @ManyToOne(cascade=[CascadeType.ALL])
+    @JoinColumn(name = "from_account")
+    var fromAccount: Account? = null
 
-    @Column(name = "to_account")
-    var toAccount: String? = null
+    @ManyToOne(cascade=[CascadeType.ALL])
+    @JoinColumn(name = "to_account")
+    var toAccount: Account? = null
 
     @Column(name = "title")
     var title: String? = null

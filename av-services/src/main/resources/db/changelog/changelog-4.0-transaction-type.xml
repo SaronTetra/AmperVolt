@@ -5,6 +5,10 @@
 
     <changeSet author="admin" id="1">
         <createTable tableName="transaction_type">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"
+                             nullable="false"/>
+            </column>
             <column name="abbr" type="VARCHAR2(3)"/>
             <column name="name" type="VARCHAR2(50)"/>
         </createTable>

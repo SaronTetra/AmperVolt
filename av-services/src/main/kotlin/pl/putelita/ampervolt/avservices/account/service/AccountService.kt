@@ -12,4 +12,10 @@ interface AccountService {
     fun create(account: Account): Account
 
     fun deleteOrUpdate(uuid: UUID)
+
+    fun findByNumber(number: String?): Account?
+
+    fun findByUuid(uuid: UUID?): Account?
+
+    fun save(account: Account): Account
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="admin" id="1">
+        <modifyDataType tableName="transaction" columnName="from_account" newDataType="BIGINT"/>
+        <modifyDataType tableName="transaction" columnName="to_account" newDataType="BIGINT"/>
+    </changeSet>
+
+    <changeSet author="admin" id="2">
+        <addForeignKeyConstraint baseTableName="transaction" baseColumnNames="from_account" constraintName="fk_transaction_from_account" referencedTableName="account"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="transaction" baseColumnNames="to_account" constraintName="fk_transaction_to_account" referencedTableName="account"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>
