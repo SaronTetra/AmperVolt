@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="admin" id="1">
+        <createTable tableName="transaction">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"
+                             nullable="false"/>
+            </column>
+            <column name="uuid" type="VARCHAR2(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="order_date" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="money" type="FLOAT"/>
+            <column name="from_account" type="VARCHAR2(26)"/>
+            <column name="to_account" type="VARCHAR2(26)"/>
+            <column name="title" type="VARCHAR2(255)"/>
+            <column name="type_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

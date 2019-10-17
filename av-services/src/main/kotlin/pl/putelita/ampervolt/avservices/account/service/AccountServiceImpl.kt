@@ -35,4 +35,16 @@ class AccountServiceImpl @Autowired constructor (private val accountRepository: 
         }
         accountRepository.save(accountDB)
     }
+
+    override fun findByNumber(number: String?): Account? {
+        return accountRepository.findByNumber(number) ?: throw AccountNotFoundException()
+    }
+
+    override fun findByUuid(uuid: UUID?): Account {
+        return accountRepository.findByUuid(uuid) ?: throw AccountNotFoundException()
+    }
+
+    override fun save(account: Account): Account {
+        return accountRepository.save(account)
+    }
 }

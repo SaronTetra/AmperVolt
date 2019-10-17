@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="admin" id="1">
+        <createTable tableName="transaction_type">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"
+                             nullable="false"/>
+            </column>
+            <column name="abbr" type="VARCHAR2(3)"/>
+            <column name="name" type="VARCHAR2(50)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="admin">
+        <insert tableName="transaction_type">
+            <column name="abbr" value="PUT"/>
+            <column name="name" value="Bank payment"/>
+        </insert>
+        <insert tableName="transaction_type">
+            <column name="abbr" value="TRN"/>
+            <column name="name" value="Transaction"/>
+        </insert>
+        <insert tableName="transaction_type">
+            <column name="abbr" value="CRD"/>
+            <column name="name" value="Card payment"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

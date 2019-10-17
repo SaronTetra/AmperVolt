@@ -6,4 +6,8 @@
     <include file="db/changelog/changelog-1.0-client.xml"/>
     <include file="db/changelog/changelog-1.1-client.xml"/>
     <include file="db/changelog/changelog-2.0-account.xml"/>
+    <include file="db/changelog/changelog-3.0-transaction.xml"/>
+    <include file="db/changelog/changelog-3.1-transaction.xml"/>
+    <include file="db/changelog/changelog-4.0-transaction-type.xml"/>
+    <include file="db/changelog/changelog-4.1-transaction-type.xml"/>
 </databaseChangeLog>
