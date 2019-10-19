@@ -27,4 +27,14 @@
             <column name="blocked" type="boolean" defaultValueBoolean="false"/>
         </createTable>
     </changeSet>
+    <changeSet id="2" author="admin">
+        <insert tableName="card">
+            <column name="uuid" value="1ecdb77c-6868-4e16-ad23-e16dd5c6cec5"/>
+            <column name="expiration_date" value="2021-10-10"/>
+            <column name="number" value="4783321135484439"/>
+            <column name="cvc" value="987"/>
+            <column name="pin" value="1234"/>
+            <column name="account_id" value="3"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
