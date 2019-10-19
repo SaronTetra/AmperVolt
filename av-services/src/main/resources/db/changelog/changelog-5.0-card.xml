@@ -26,7 +26,5 @@
             <column name="removed" type="boolean" defaultValueBoolean="false"/>
             <column name="blocked" type="boolean" defaultValueBoolean="false"/>
         </createTable>
-
-
     </changeSet>
 </databaseChangeLog>

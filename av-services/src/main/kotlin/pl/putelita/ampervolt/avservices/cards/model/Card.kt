@@ -34,7 +34,7 @@ class Card {
     var pin: String? = null
 
     @Column(name="account_id")
-    var accountId: Int? = null
+    var accountId: Long? = null
 
     @Column(name = "removed")
     var removed: Boolean = false
