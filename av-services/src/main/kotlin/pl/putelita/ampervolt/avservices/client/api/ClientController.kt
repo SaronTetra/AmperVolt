@@ -29,7 +29,7 @@ class ClientController @Autowired constructor (private val clientService: Client
 
     @PutMapping("{uuid}")
     fun update(@RequestBody client: Client, @PathVariable uuid: UUID): Client {
-        return clientService.update(uuid, client);
+        return clientService.update(uuid, client)
     }
 
     @DeleteMapping("{uuid}")
