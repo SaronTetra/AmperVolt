@@ -37,6 +37,4 @@ class CardController @Autowired constructor (private val cardService: CardServic
     fun deleteOrUpdate(@PathVariable uuid: UUID) {
         cardService.deleteOrUpdate(uuid)
     }
-
-
 }
